@@ -6,8 +6,9 @@ import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoriesModule } from './modules/catalog/categories/categories.module';
 import { ProductsModule } from './modules/catalog/products/products.module';
+import { InventoryModule } from './modules/inventory/inventory.module';
 
 @Module({
-  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule],
+  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule],
 })
 export class AppModule {}
