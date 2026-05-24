@@ -1,0 +1,1 @@
+export { CreateCategoryDto, UpdateCategoryDto } from './create-category.dto';
