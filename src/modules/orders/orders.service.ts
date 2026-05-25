@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CartService } from '../cart/cart.service';
+import { AuditService } from '../audit/audit.service';
 import { OrderFilterDto } from './dto';
 import { OrderStatus } from '../../generated/prisma/client';
 
@@ -18,6 +19,7 @@ export class OrdersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly cartService: CartService,
+    private readonly auditService: AuditService,
   ) {}
 
   canTransition(from: OrderStatus, to: OrderStatus): boolean {
@@ -100,6 +102,14 @@ export class OrdersService {
 
     await this.cartService.clearCart(checkout.cartId);
 
+    await this.auditService.log({
+      userId,
+      action: 'ORDER_CREATED',
+      entityType: 'order',
+      entityId: order.id,
+      changes: order,
+    });
+
     return order;
   }
 
@@ -155,7 +165,7 @@ export class OrdersService {
 
     this.validateTransition(order.status, dto.status);
 
-    return this.prisma.order.update({
+    const updated = await this.prisma.order.update({
       where: { id },
       data: {
         status: dto.status,
@@ -171,6 +181,16 @@ export class OrdersService {
         timeline: { orderBy: { createdAt: 'asc' } },
       },
     });
+
+    await this.auditService.log({
+      userId: order.userId,
+      action: 'ORDER_STATUS_CHANGED',
+      entityType: 'order',
+      entityId: order.id,
+      changes: { from: order.status, to: dto.status, note: dto.note },
+    });
+
+    return updated;
   }
 
   async getTimeline(id: string) {
