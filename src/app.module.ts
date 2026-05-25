@@ -26,8 +26,9 @@ import { SettlementsModule } from './modules/marketplace/settlements/settlements
 import { DashboardModule } from './modules/marketplace/dashboard/dashboard.module';
 import { WishlistModule } from './modules/wishlist/wishlist.module';
 import { WaitlistModule } from './modules/waitlist/waitlist.module';
+import { PromotionsModule } from './modules/promotions/promotions.module';
 
 @Module({
-  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule, VendorsModule, VerificationModule, CommissionsModule, ProductApprovalModule, ShippingPoliciesModule, CheckoutSplitModule, SettlementsModule, DashboardModule, WishlistModule, WaitlistModule],
+  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule, VendorsModule, VerificationModule, CommissionsModule, ProductApprovalModule, ShippingPoliciesModule, CheckoutSplitModule, SettlementsModule, DashboardModule, WishlistModule, WaitlistModule, PromotionsModule],
 })
 export class AppModule {}
