@@ -85,6 +85,7 @@ model Product {
   categoryId  String
   category    Category         @relation(fields: [categoryId], references: [id])
   variants    ProductVariant[]
+  cartItems   CartItem[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
@@ -94,15 +95,16 @@ model Product {
 }
 
 model ProductVariant {
-  id        String   @id @default(uuid())
-  sku       String   @unique
+  id        String      @id @default(uuid())
+  sku       String      @unique
   productId String
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product   Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
   options   Json
   inventory Inventory?
   price     ProductPrice?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  cartItems  CartItem[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
   @@index([productId])
 }
@@ -127,4 +129,37 @@ model ProductPrice {
   saleEndsAt      DateTime?
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
+}
+
+model Cart {
+  id         String     @id @default(uuid())
+  userId     String?
+  sessionId  String?
+  items      CartItem[]
+  couponCode String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@index([userId])
+  @@index([sessionId])
+}
+
+model CartItem {
+  id         String          @id @default(uuid())
+  cartId     String
+  cart       Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId  String
+  product    Product         @relation(fields: [productId], references: [id])
+  variantId  String?
+  variant    ProductVariant? @relation(fields: [variantId], references: [id])
+  quantity   Int             @default(1)
+  priceAtAdd Decimal         @db.Decimal(10, 2)
+  ownerType  ProductOwner    @default(PLATFORM)
+  vendorId   String?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  @@index([cartId])
+  @@index([productId])
+  @@unique([cartId, variantId])
 }
