@@ -13,6 +13,20 @@ enum UserRole {
   ADMIN
 }
 
+enum VendorStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+  REJECTED
+}
+
+enum VendorPlan {
+  FREE
+  BASIC
+  PRO
+  PREMIUM
+}
+
 enum CheckoutStatus {
   PENDING
   VALIDATED
@@ -72,6 +86,85 @@ model Address {
   @@index([userId])
 }
 
+model Vendor {
+  id            String              @id @default(uuid())
+  userId        String              @unique
+  storeName     String
+  storeSlug     String              @unique
+  description   String?
+  logo          String?
+  banner        String?
+  contactEmail  String?
+  contactPhone  String?
+  commissionRate Decimal            @default(10.0) @db.Decimal(5, 2)
+  status        VendorStatus        @default(PENDING)
+  balance       Decimal             @default(0) @db.Decimal(10, 2)
+  totalEarnings Decimal             @default(0) @db.Decimal(10, 2)
+  subscription  VendorSubscription?
+  verification  VendorVerification?
+  shippingPolicy VendorShippingPolicy?
+  metrics        VendorMetrics?
+  commissionRules CommissionRule[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+  products      Product[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model VendorSubscription {
+  id          String     @id @default(uuid())
+  vendorId    String     @unique
+  vendor      Vendor     @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  plan        VendorPlan @default(FREE)
+  maxProducts Int        @default(10)
+  monthlyFee  Decimal    @default(0) @db.Decimal(10, 2)
+  startsAt    DateTime   @default(now())
+  endsAt      DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+enum VerificationStatus {
+  PENDING
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+}
+
+model VendorVerification {
+  id                  String             @id @default(uuid())
+  vendorId            String             @unique
+  vendor              Vendor             @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  businessLicense     String?
+  taxId               String?
+  bankAccount         String?
+  bankAccountVerified Boolean            @default(false)
+  kycStatus           VerificationStatus @default(PENDING)
+  reviewedBy          String?
+  reviewedAt          DateTime?
+  notes               String?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+}
+
+model CommissionRule {
+  id            String    @id @default(uuid())
+  vendorId      String?
+  vendor        Vendor?   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  categoryId    String?
+  category      Category? @relation(fields: [categoryId], references: [id])
+  rate          Decimal   @db.Decimal(5, 2)
+  minOrderValue Decimal?  @db.Decimal(10, 2)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([vendorId])
+  @@index([categoryId])
+}
+
 model Category {
   id          String     @id @default(uuid())
   name        String
@@ -83,7 +176,8 @@ model Category {
   children    Category[] @relation("CategoryTree")
   sortOrder   Int        @default(0)
   isActive    Boolean    @default(true)
-  products   Product[]
+  products      Product[]
+  commissionRules CommissionRule[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 }
@@ -108,6 +202,8 @@ model Product {
   ownerType   ProductOwner     @default(PLATFORM)
   categoryId  String
   category    Category         @relation(fields: [categoryId], references: [id])
+  vendorId    String?
+  vendor      Vendor?          @relation(fields: [vendorId], references: [id])
   variants    ProductVariant[]
   cartItems   CartItem[]
   orderItems  OrderItem[]
@@ -115,6 +211,7 @@ model Product {
   updatedAt   DateTime         @updatedAt
 
   @@index([categoryId])
+  @@index([vendorId])
   @@index([status])
   @@index([ownerType])
 }
@@ -352,4 +449,34 @@ model Shipment {
   deliveredAt    DateTime?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
+}
+
+enum FulfillmentMode {
+  VENDOR_SELF
+  PLATFORM_MANAGED
+  DROPSHIP
+}
+
+model VendorShippingPolicy {
+  id                 String          @id @default(uuid())
+  vendorId           String          @unique
+  vendor             Vendor          @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  fulfillmentMode    FulfillmentMode @default(VENDOR_SELF)
+  processingTimeDays Int             @default(2)
+  returnPolicy       String?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+}
+
+model VendorMetrics {
+  id              String  @id @default(uuid())
+  vendorId        String  @unique
+  vendor          Vendor  @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  totalSales      Decimal @default(0) @db.Decimal(12, 2)
+  totalOrders     Int     @default(0)
+  averageRating   Decimal @default(0) @db.Decimal(3, 2)
+  responseTimeHrs Decimal @default(0) @db.Decimal(5, 1)
+  defectRate      Decimal @default(0) @db.Decimal(5, 2)
+  fulfillmentRate Decimal @default(0) @db.Decimal(5, 2)
+  updatedAt       DateTime @updatedAt
 }

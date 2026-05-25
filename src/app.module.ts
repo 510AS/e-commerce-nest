@@ -16,8 +16,13 @@ import { PaymentsModule } from './modules/payments/payments.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { ShippingModule } from './modules/shipping/shipping.module';
+import { ProductApprovalModule } from './modules/marketplace/product-approval/product-approval.module';
+import { ShippingPoliciesModule } from './modules/marketplace/shipping-policies/shipping-policies.module';
+import { VendorsModule } from './modules/vendors/vendors.module';
+import { VerificationModule } from './modules/marketplace/verification/verification.module';
+import { CommissionsModule } from './modules/marketplace/commissions/commissions.module';
 
 @Module({
-  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule],
+  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule, VendorsModule, VerificationModule, CommissionsModule, ProductApprovalModule, ShippingPoliciesModule],
 })
 export class AppModule {}
