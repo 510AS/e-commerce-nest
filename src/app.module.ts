@@ -10,8 +10,9 @@ import { InventoryModule } from './modules/inventory/inventory.module';
 import { PricingModule } from './modules/pricing/pricing.module';
 import { HealthModule } from './modules/health/health.module';
 import { CartModule } from './modules/cart/cart.module';
+import { CheckoutModule } from './modules/checkout/checkout.module';
 
 @Module({
-  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule],
+  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule],
 })
 export class AppModule {}

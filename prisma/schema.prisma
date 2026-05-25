@@ -13,6 +13,15 @@ enum UserRole {
   ADMIN
 }
 
+enum CheckoutStatus {
+  PENDING
+  VALIDATED
+  PAYMENT_PENDING
+  COMPLETED
+  FAILED
+  EXPIRED
+}
+
 model User {
   id        String    @id @default(uuid())
   email     String    @unique
@@ -162,4 +171,24 @@ model CartItem {
   @@index([cartId])
   @@index([productId])
   @@unique([cartId, variantId])
+}
+
+model Checkout {
+  id              String         @id @default(uuid())
+  userId          String
+  cartId          String         @unique
+  status          CheckoutStatus @default(PENDING)
+  billingAddress  Json
+  shippingAddress Json
+  shippingMethod  String?
+  subtotal        Decimal        @db.Decimal(10, 2)
+  shippingAmount  Decimal        @db.Decimal(10, 2) @default(0)
+  taxAmount       Decimal        @db.Decimal(10, 2) @default(0)
+  discountAmount  Decimal        @db.Decimal(10, 2) @default(0)
+  total           Decimal        @db.Decimal(10, 2)
+  currencyCode    String         @default("USD")
+  idempotencyKey  String?        @unique
+  notes           String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 }
