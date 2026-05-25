@@ -1,0 +1,14 @@
+version: 1
+project:
+  name: e-commerce-nest
+  primaryLanguage: typescript
+  projectRoots:
+    - .
+tracker:
+  type: none
+naming:
+  includeTrackerId: false
+  globalSequence: true
+agents:
+  - claude-code
+  - kilo
