@@ -1,30 +1,30 @@
-import { IsUUID, IsInt, Min, IsOptional, IsDecimal } from 'class-validator'
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
+import { IsUUID, IsInt, Min, IsOptional, IsDecimal } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateTierPriceDto {
   @ApiProperty()
   @IsUUID()
-  productId: string
+  productId: string;
 
   @ApiProperty()
   @IsInt()
   @Min(1)
-  minQty: number
+  minQty: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Min(1)
-  maxQty?: number
+  maxQty?: number;
 
   @ApiProperty({ example: '49.99' })
   @IsDecimal()
-  price: string
+  price: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsUUID()
-  groupId?: string
+  groupId?: string;
 }
 
 export class UpdateTierPriceDto {
@@ -32,21 +32,21 @@ export class UpdateTierPriceDto {
   @IsOptional()
   @IsInt()
   @Min(1)
-  minQty?: number
+  minQty?: number;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsInt()
   @Min(1)
-  maxQty?: number
+  maxQty?: number;
 
   @ApiPropertyOptional({ example: '49.99' })
   @IsOptional()
   @IsDecimal()
-  price?: string
+  price?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
   @IsUUID()
-  groupId?: string
+  groupId?: string;
 }

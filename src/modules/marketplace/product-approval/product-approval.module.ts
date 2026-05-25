@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ProductApprovalController } from './product-approval.controller';
 import { ProductApprovalService } from './product-approval.service';
-import { VendorsModule } from '../vendors/vendors.module';
+import { VendorsModule } from '../../vendors/vendors.module';
 
 @Module({
   imports: [VendorsModule],

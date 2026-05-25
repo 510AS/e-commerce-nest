@@ -83,10 +83,7 @@ export class CheckoutSplitService {
 
     const vendorBreakdowns = await Promise.all(
       vendors.map(async (vs) => {
-        const { rate, commissionAmount } = await this.commissionsService.calculate(
-          vs.vendorId,
-          vs.subtotal,
-        );
+        const { rate, commissionAmount } = await this.commissionsService.calculate(vs.vendorId, vs.subtotal);
         const vendorEarnings = vs.subtotal - commissionAmount;
         const platformEarnings = commissionAmount;
 
@@ -116,8 +113,7 @@ export class CheckoutSplitService {
         vendorItemsTotal: vendors.reduce((sum, v) => sum + v.subtotal, 0),
         totalCommission: vendorBreakdowns.reduce((sum, v) => sum + v.commission, 0),
         totalVendorEarnings: vendorBreakdowns.reduce((sum, v) => sum + v.vendorEarnings, 0),
-        totalPlatformEarnings:
-          platform.subtotal + vendorBreakdowns.reduce((sum, v) => sum + v.platformEarnings, 0),
+        totalPlatformEarnings: platform.subtotal + vendorBreakdowns.reduce((sum, v) => sum + v.platformEarnings, 0),
       },
     };
   }

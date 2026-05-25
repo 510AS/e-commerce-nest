@@ -1,6 +1,4 @@
-import {
-  Controller, Get, Post, Put, Delete, Body, Param,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { CustomerGroupsService } from './customer-groups.service';
 import { CreateCustomerGroupDto, UpdateCustomerGroupDto } from './dto';
@@ -39,10 +37,7 @@ export class CustomerGroupsController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a customer group' })
-  update(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() dto: UpdateCustomerGroupDto,
-  ) {
+  update(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: UpdateCustomerGroupDto) {
     return this.customerGroupsService.update(id, dto);
   }
 
@@ -58,10 +53,7 @@ export class CustomerGroupsController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Assign user to customer group' })
-  assignUser(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Param('userId', ParseObjectIdPipe) userId: string,
-  ) {
+  assignUser(@Param('id', ParseObjectIdPipe) id: string, @Param('userId', ParseObjectIdPipe) userId: string) {
     return this.customerGroupsService.assignUserToGroup(userId, id);
   }
 }

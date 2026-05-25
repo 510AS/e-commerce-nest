@@ -32,12 +32,7 @@ export class PromotionsService {
     return this.prisma.promotion.create({ data });
   }
 
-  async findAll(filters: {
-    type?: string;
-    isActive?: boolean;
-    page?: number;
-    limit?: number;
-  }) {
+  async findAll(filters: { type?: string; isActive?: boolean; page?: number; limit?: number }) {
     const { type, isActive, page = 1, limit = 20 } = filters;
     const skip = (page - 1) * limit;
     const where: any = {};
@@ -232,9 +227,7 @@ export class PromotionsService {
         };
 
       case 'APPLY_BEST': {
-        const best = sorted.reduce((best, p) =>
-          (p._discount ?? 0) > (best._discount ?? 0) ? p : best,
-        );
+        const best = sorted.reduce((best, p) => ((p._discount ?? 0) > (best._discount ?? 0) ? p : best));
         return { applied: [best], totalDiscount: best._discount ?? 0 };
       }
 

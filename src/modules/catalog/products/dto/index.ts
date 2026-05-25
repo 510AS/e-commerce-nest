@@ -1,1 +1,7 @@
-export { CreateProductDto, CreateVariantDto, UpdateProductDto, ProductStatus, ProductOwner } from './create-product.dto';
+export {
+  CreateProductDto,
+  CreateVariantDto,
+  UpdateProductDto,
+  ProductStatus,
+  ProductOwner,
+} from './create-product.dto';

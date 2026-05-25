@@ -20,10 +20,7 @@ export class SettlementsController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a payout for a vendor' })
-  createPayout(
-    @CurrentUser('id') adminId: string,
-    @Body() dto: CreatePayoutDto,
-  ) {
+  createPayout(@CurrentUser('id') adminId: string, @Body() dto: CreatePayoutDto) {
     return this.settlementsService.createPayout(dto.vendorId, adminId);
   }
 
@@ -51,11 +48,7 @@ export class SettlementsController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mark payout as paid' })
-  markPaid(
-    @CurrentUser('id') adminId: string,
-    @Param('id') id: string,
-    @Body() dto: MarkPaidDto,
-  ) {
+  markPaid(@CurrentUser('id') adminId: string, @Param('id') id: string, @Body() dto: MarkPaidDto) {
     return this.settlementsService.markPaid({ ...dto, payoutId: id }, adminId);
   }
 
@@ -63,10 +56,7 @@ export class SettlementsController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get platform revenue report' })
-  getPlatformRevenue(
-    @Query('fromDate') fromDate?: string,
-    @Query('toDate') toDate?: string,
-  ) {
+  getPlatformRevenue(@Query('fromDate') fromDate?: string, @Query('toDate') toDate?: string) {
     return this.settlementsService.getPlatformRevenue({ fromDate, toDate });
   }
 }

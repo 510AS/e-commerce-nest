@@ -13,7 +13,7 @@ export class SocialAuthController {
   @ApiOperation({ summary: 'Google login placeholder' })
   googleLogin() {
     return {
-      message: 'Google OAuth endpoint - implement with @UseGuards(AuthGuard(\'google\')) and google-auth-library',
+      message: "Google OAuth endpoint - implement with @UseGuards(AuthGuard('google')) and google-auth-library",
       redirect: '/auth/social/google/callback',
     };
   }
@@ -22,7 +22,9 @@ export class SocialAuthController {
   @Public()
   @ApiOperation({ summary: 'Google login callback' })
   googleCallback(@Query('code') code?: string) {
-    return this.socialAuthService.googleLogin({ user: { email: 'test@example.com', firstName: 'Test', lastName: 'User', id: code ?? 'google-123' } });
+    return this.socialAuthService.googleLogin({
+      user: { email: 'test@example.com', firstName: 'Test', lastName: 'User', id: code ?? 'google-123' },
+    });
   }
 
   @Get('facebook')
@@ -30,7 +32,7 @@ export class SocialAuthController {
   @ApiOperation({ summary: 'Facebook login placeholder' })
   facebookLogin() {
     return {
-      message: 'Facebook OAuth endpoint - implement with @UseGuards(AuthGuard(\'facebook\')) and passport-facebook',
+      message: "Facebook OAuth endpoint - implement with @UseGuards(AuthGuard('facebook')) and passport-facebook",
       redirect: '/auth/social/facebook/callback',
     };
   }
@@ -39,7 +41,9 @@ export class SocialAuthController {
   @Public()
   @ApiOperation({ summary: 'Facebook login callback' })
   facebookCallback(@Query('code') code?: string) {
-    return this.socialAuthService.facebookLogin({ user: { email: 'test@example.com', firstName: 'Test', lastName: 'User', id: code ?? 'fb-123' } });
+    return this.socialAuthService.facebookLogin({
+      user: { email: 'test@example.com', firstName: 'Test', lastName: 'User', id: code ?? 'fb-123' },
+    });
   }
 
   @Get('apple')
@@ -47,7 +51,7 @@ export class SocialAuthController {
   @ApiOperation({ summary: 'Apple login placeholder' })
   appleLogin() {
     return {
-      message: 'Apple OAuth endpoint - implement with @UseGuards(AuthGuard(\'apple\')) and passport-apple',
+      message: "Apple OAuth endpoint - implement with @UseGuards(AuthGuard('apple')) and passport-apple",
       redirect: '/auth/social/apple/callback',
     };
   }
@@ -56,6 +60,8 @@ export class SocialAuthController {
   @Public()
   @ApiOperation({ summary: 'Apple login callback' })
   appleCallback(@Query('code') code?: string) {
-    return this.socialAuthService.appleLogin({ user: { email: 'test@example.com', firstName: 'Test', lastName: 'User', id: code ?? 'apple-123' } });
+    return this.socialAuthService.appleLogin({
+      user: { email: 'test@example.com', firstName: 'Test', lastName: 'User', id: code ?? 'apple-123' },
+    });
   }
 }

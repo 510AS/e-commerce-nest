@@ -1,2 +1,2 @@
-export { QuotesModule } from './quotes.module'
-export { QuotesService } from './quotes.service'
+export { QuotesModule } from './quotes.module';
+export { QuotesService } from './quotes.service';

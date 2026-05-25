@@ -115,6 +115,7 @@ model User {
   firstName String
   lastName  String
   role      UserRole  @default(CUSTOMER)
+  locale    String    @default("en")
   isActive  Boolean   @default(true)
   lastLogin DateTime?
   createdAt DateTime  @default(now())
@@ -244,6 +245,7 @@ model Category {
   children    Category[] @relation("CategoryTree")
   sortOrder   Int        @default(0)
   isActive    Boolean    @default(true)
+  translations Json     @default("{}")
   products      Product[]
   commissionRules CommissionRule[]
   createdAt   DateTime   @default(now())
@@ -281,6 +283,7 @@ model Product {
   relatedToRelations ProductRelation[] @relation("RelatedProducts")
   quoteRequests  QuoteRequest[]
   tierPrices     TierPrice[]
+  translations   Json             @default("{}")
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
@@ -349,9 +352,9 @@ model CartItem {
   cartId     String
   cart       Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
   productId  String
-  product    Product         @relation(fields: [productId], references: [id])
+  product    Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
   variantId  String?
-  variant    ProductVariant? @relation(fields: [variantId], references: [id])
+  variant    ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
   quantity   Int             @default(1)
   priceAtAdd Decimal         @db.Decimal(10, 2)
   ownerType  ProductOwner    @default(PLATFORM)
@@ -434,9 +437,9 @@ model OrderItem {
   orderId     String
   order       Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   productId   String
-  product     Product       @relation(fields: [productId], references: [id])
+  product     Product       @relation(fields: [productId], references: [id], onDelete: Restrict)
   variantId   String?
-  variant     ProductVariant? @relation(fields: [variantId], references: [id])
+  variant     ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
   productName String
   sku         String
   quantity    Int
@@ -463,7 +466,7 @@ model OrderTimeline {
 model Payment {
   id                    String        @id @default(uuid())
   orderId               String        @unique
-  order                 Order         @relation(fields: [orderId], references: [id])
+  order                 Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
   amount                Decimal       @db.Decimal(10, 2)
   currencyCode          String        @default("USD")
   method                PaymentMethod @default(STRIPE)
@@ -520,7 +523,7 @@ model ShippingMethod {
 model Shipment {
   id             String          @id @default(uuid())
   orderId        String          @unique
-  order          Order           @relation(fields: [orderId], references: [id])
+  order          Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
   carrier        String
   trackingNumber String?
   trackingUrl    String?
@@ -684,7 +687,7 @@ model Promotion {
   validUntil    DateTime
   conditions    Json?
   vendorId      String?
-  vendor        Vendor?       @relation(fields: [vendorId], references: [id])
+  vendor        Vendor?       @relation(fields: [vendorId], references: [id], onDelete: SetNull)
   usages        PromotionUsage[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt

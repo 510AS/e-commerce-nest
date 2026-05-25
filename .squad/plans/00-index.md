@@ -4,4 +4,4 @@ One row per feature folder under `.squad/plans/`. `NN` continues as a global exe
 
 | Feature | Overview | NN range |
 |---------|----------|----------|
-| _add rows per feature_ |
+| i18n-graphql | Multi-language i18n support + GraphQL integration | 01–02 |

@@ -1,1 +1,1 @@
-export { CreateQuoteDto, RespondQuoteDto } from './quotes.dto'
+export { CreateQuoteDto, RespondQuoteDto } from './quotes.dto';

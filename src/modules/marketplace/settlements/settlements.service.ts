@@ -23,10 +23,7 @@ export class SettlementsService {
       select: { totalPrice: true },
     });
 
-    const availableBalance = deliveredSplits.reduce(
-      (sum, item) => sum + Number(item.totalPrice),
-      0,
-    );
+    const availableBalance = deliveredSplits.reduce((sum, item) => sum + Number(item.totalPrice), 0);
 
     return {
       vendorId,
@@ -257,10 +254,7 @@ export class SettlementsService {
       select: { totalPrice: true },
     });
 
-    const platformProductRevenue = platformItems.reduce(
-      (sum, item) => sum + Number(item.totalPrice),
-      0,
-    );
+    const platformProductRevenue = platformItems.reduce((sum, item) => sum + Number(item.totalPrice), 0);
 
     const vendorsMap = new Map<string, { total: number; rate: number }>();
     for (const item of vendorItems) {

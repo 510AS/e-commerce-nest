@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Patch, Param, Query, Body } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger'
-import { PurchaseOrdersService } from './purchase-orders.service'
-import { CreatePODto, ApprovePODto } from './dto'
-import { Roles, CurrentUser } from '../../../common'
+import { Controller, Get, Post, Patch, Param, Query, Body } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { PurchaseOrdersService } from './purchase-orders.service';
+import { CreatePODto, ApprovePODto } from './dto';
+import { Roles, CurrentUser } from '../../../common';
 
 @ApiTags('B2B Purchase Orders')
 @Controller('b2b/purchase-orders')
@@ -14,7 +14,7 @@ export class PurchaseOrdersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a purchase order' })
   create(@CurrentUser('id') userId: string, @Body() dto: CreatePODto) {
-    return this.purchaseOrdersService.create(userId, dto)
+    return this.purchaseOrdersService.create(userId, dto);
   }
 
   @Get()
@@ -36,7 +36,7 @@ export class PurchaseOrdersController {
       status,
       page: Number(page) || 1,
       limit: Number(limit) || 20,
-    })
+    });
   }
 
   @Get(':id')
@@ -44,7 +44,7 @@ export class PurchaseOrdersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a purchase order by ID' })
   findOne(@Param('id') id: string) {
-    return this.purchaseOrdersService.findById(id)
+    return this.purchaseOrdersService.findById(id);
   }
 
   @Post(':id/submit')
@@ -52,19 +52,15 @@ export class PurchaseOrdersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Submit a purchase order' })
   submit(@Param('id') id: string) {
-    return this.purchaseOrdersService.submit(id)
+    return this.purchaseOrdersService.submit(id);
   }
 
   @Post(':id/approve')
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Approve or reject a purchase order' })
-  approve(
-    @Param('id') id: string,
-    @CurrentUser('id') adminId: string,
-    @Body() dto: ApprovePODto,
-  ) {
-    return this.purchaseOrdersService.approve(id, dto, adminId)
+  approve(@Param('id') id: string, @CurrentUser('id') adminId: string, @Body() dto: ApprovePODto) {
+    return this.purchaseOrdersService.approve(id, dto, adminId);
   }
 
   @Post(':id/convert')
@@ -72,7 +68,6 @@ export class PurchaseOrdersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Convert approved PO to an order' })
   convertToOrder(@Param('id') id: string) {
-    return this.purchaseOrdersService.convertToOrder(id)
+    return this.purchaseOrdersService.convertToOrder(id);
   }
-
-  }
+}

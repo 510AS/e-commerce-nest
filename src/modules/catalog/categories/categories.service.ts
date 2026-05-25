@@ -1,23 +1,28 @@
 import { Injectable, NotFoundException, ConflictException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../../database/prisma/prisma.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './dto';
+import { I18nService } from '../../../i18n';
 
 @Injectable()
 export class CategoriesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly i18n: I18nService,
+  ) {}
 
   async findAll() {
-    return this.prisma.category.findMany({
+    const categories = await this.prisma.category.findMany({
       include: {
-        parent: { select: { id: true, name: true, slug: true } },
+        parent: { select: { id: true, name: true, slug: true, translations: true } },
         _count: { select: { children: true } },
       },
       orderBy: [{ parentId: { sort: 'asc', nulls: 'first' } }, { sortOrder: 'asc' }],
     });
+    return categories.map((c) => this.mapCategory(c));
   }
 
   async findTree() {
-    return this.prisma.category.findMany({
+    const categories = await this.prisma.category.findMany({
       where: { parentId: null },
       include: {
         children: {
@@ -30,30 +35,31 @@ export class CategoriesService {
       },
       orderBy: { sortOrder: 'asc' },
     });
+    return categories.map((c) => this.mapTreeCategory(c));
   }
 
   async findById(id: string) {
     const category = await this.prisma.category.findUnique({
       where: { id },
       include: {
-        parent: { select: { id: true, name: true, slug: true } },
-        children: { select: { id: true, name: true, slug: true, isActive: true } },
+        parent: { select: { id: true, name: true, slug: true, translations: true } },
+        children: { select: { id: true, name: true, slug: true, isActive: true, translations: true } },
       },
     });
     if (!category) throw new NotFoundException('Category not found');
-    return category;
+    return this.mapCategory(category);
   }
 
   async findBySlug(slug: string) {
     const category = await this.prisma.category.findUnique({
       where: { slug },
       include: {
-        parent: { select: { id: true, name: true, slug: true } },
-        children: { select: { id: true, name: true, slug: true, isActive: true } },
+        parent: { select: { id: true, name: true, slug: true, translations: true } },
+        children: { select: { id: true, name: true, slug: true, isActive: true, translations: true } },
       },
     });
     if (!category) throw new NotFoundException(`Category "${slug}" not found`);
-    return category;
+    return this.mapCategory(category);
   }
 
   async create(dto: CreateCategoryDto) {
@@ -65,8 +71,9 @@ export class CategoriesService {
       if (!parent) throw new NotFoundException('Parent category not found');
     }
 
+    const { translations, ...rest } = dto as any;
     return this.prisma.category.create({
-      data: dto,
+      data: { ...rest, translations: translations ?? {} },
       include: { parent: { select: { id: true, name: true } } },
     });
   }
@@ -85,9 +92,13 @@ export class CategoriesService {
       throw new BadRequestException('Category cannot be its own parent');
     }
 
+    const { translations, ...rest } = dto as any;
+    const data: any = { ...rest };
+    if (translations !== undefined) data.translations = translations;
+
     return this.prisma.category.update({
       where: { id },
-      data: dto,
+      data,
       include: { parent: { select: { id: true, name: true } } },
     });
   }
@@ -108,5 +119,29 @@ export class CategoriesService {
       where: { id },
       data: { isActive: !category.isActive },
     });
+  }
+
+  private mapCategory(c: any): any {
+    const name = this.i18n.resolveTranslation((c.translations as any)?.['name']) ?? c.name;
+    const parent = c.parent
+      ? {
+          id: c.parent.id,
+          name: this.i18n.resolveTranslation((c.parent.translations as any)?.['name']) ?? c.parent.name,
+          slug: c.parent.slug,
+        }
+      : undefined;
+    const children = (c.children || []).map((ch: any) => ({
+      id: ch.id,
+      name: this.i18n.resolveTranslation((ch.translations as any)?.['name']) ?? ch.name,
+      slug: ch.slug,
+      isActive: ch.isActive,
+    }));
+    return { ...c, name, parent, children };
+  }
+
+  private mapTreeCategory(c: any): any {
+    const name = this.i18n.resolveTranslation((c.translations as any)?.['name']) ?? c.name;
+    const children = (c.children || []).map((ch: any) => this.mapTreeCategory(ch));
+    return { ...c, name, children };
   }
 }

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppConfigModule } from './config/config.module';
 import { PrismaModule } from './database/prisma/prisma.module';
+import { I18nModule } from './i18n';
 import { CommonModule } from './common/common.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
@@ -42,6 +43,49 @@ import { SeoModule } from './modules/cms/seo/seo.module';
 import { SocialAuthModule } from './modules/auth/social/social-auth.module';
 
 @Module({
-  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule, VendorsModule, VerificationModule, CommissionsModule, ProductApprovalModule, ShippingPoliciesModule, CheckoutSplitModule, SettlementsModule, DashboardModule, WishlistModule, WaitlistModule, PromotionsModule, TaxModule, CustomerGroupsModule, RecentlyViewedModule, ProductRelationsModule, ProductBundlesModule, AbandonedCartModule, BusinessModule, PurchaseOrdersModule, QuotesModule, TierPricingModule, ImportExportModule, SeoModule, SocialAuthModule],
+  imports: [
+    I18nModule,
+    AppConfigModule,
+    CommonModule,
+    PrismaModule,
+    UsersModule,
+    AuthModule,
+    CategoriesModule,
+    ProductsModule,
+    InventoryModule,
+    PricingModule,
+    HealthModule,
+    CartModule,
+    CheckoutModule,
+    OrdersModule,
+    PaymentsModule,
+    AuditModule,
+    NotificationsModule,
+    ShippingModule,
+    VendorsModule,
+    VerificationModule,
+    CommissionsModule,
+    ProductApprovalModule,
+    ShippingPoliciesModule,
+    CheckoutSplitModule,
+    SettlementsModule,
+    DashboardModule,
+    WishlistModule,
+    WaitlistModule,
+    PromotionsModule,
+    TaxModule,
+    CustomerGroupsModule,
+    RecentlyViewedModule,
+    ProductRelationsModule,
+    ProductBundlesModule,
+    AbandonedCartModule,
+    BusinessModule,
+    PurchaseOrdersModule,
+    QuotesModule,
+    TierPricingModule,
+    ImportExportModule,
+    SeoModule,
+    SocialAuthModule,
+  ],
 })
 export class AppModule {}

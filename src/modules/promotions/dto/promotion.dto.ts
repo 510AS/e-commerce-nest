@@ -1,4 +1,15 @@
-import { IsString, IsOptional, IsUUID, IsEnum, IsNumber, IsBoolean, IsDateString, IsObject, Min, IsNumberString } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsUUID,
+  IsEnum,
+  IsNumber,
+  IsBoolean,
+  IsDateString,
+  IsObject,
+  Min,
+  IsNumberString,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { PromotionType, PromotionScope, StackingRule, DiscountType } from '../../../generated/prisma/client';
 

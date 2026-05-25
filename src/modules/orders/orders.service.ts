@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CartService } from '../cart/cart.service';
 import { AuditService } from '../audit/audit.service';
@@ -20,6 +21,7 @@ export class OrdersService {
     private readonly prisma: PrismaService,
     private readonly cartService: CartService,
     private readonly auditService: AuditService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   canTransition(from: OrderStatus, to: OrderStatus): boolean {
@@ -110,6 +112,8 @@ export class OrdersService {
       changes: order,
     });
 
+    this.eventEmitter.emit('order.created', { orderId: order.id, orderNumber: order.orderNumber, userId, email: 'placeholder@email.com' });
+
     return order;
   }
 
@@ -190,6 +194,8 @@ export class OrdersService {
       changes: { from: order.status, to: dto.status, note: dto.note },
     });
 
+    this.eventEmitter.emit('order.status_changed', { orderId: order.id, orderNumber: order.orderNumber, userId: order.userId, email: 'placeholder@email.com', status: dto.status });
+
     return updated;
   }
 
@@ -205,7 +211,9 @@ export class OrdersService {
 
   private generateOrderNumber(): string {
     const timestamp = Date.now();
-    const random = Math.floor(Math.random() * 0xffff).toString(16).padStart(4, '0');
+    const random = Math.floor(Math.random() * 0xffff)
+      .toString(16)
+      .padStart(4, '0');
     return `ORD-${timestamp}-${random}`;
   }
 }

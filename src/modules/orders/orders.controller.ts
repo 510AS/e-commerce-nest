@@ -13,10 +13,7 @@ export class OrdersController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create order from checkout' })
-  createFromCheckout(
-    @CurrentUser('id') userId: string,
-    @Param('checkoutId', ParseObjectIdPipe) checkoutId: string,
-  ) {
+  createFromCheckout(@CurrentUser('id') userId: string, @Param('checkoutId', ParseObjectIdPipe) checkoutId: string) {
     return this.ordersService.createFromCheckout(userId, checkoutId);
   }
 
@@ -24,10 +21,7 @@ export class OrdersController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'List user orders' })
-  findAll(
-    @CurrentUser('id') userId: string,
-    @Query() filter: OrderFilterDto,
-  ) {
+  findAll(@CurrentUser('id') userId: string, @Query() filter: OrderFilterDto) {
     return this.ordersService.findAll(userId, filter);
   }
 
@@ -43,10 +37,7 @@ export class OrdersController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update order status (admin only)' })
-  updateStatus(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() dto: UpdateOrderStatusDto,
-  ) {
+  updateStatus(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: UpdateOrderStatusDto) {
     return this.ordersService.updateStatus(id, dto as any);
   }
 

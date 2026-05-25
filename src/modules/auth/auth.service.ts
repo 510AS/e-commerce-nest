@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from '../users/users.service';
 import { RegisterDto, LoginDto } from './dto';
+import { I18nService } from '../../i18n';
 
 @Injectable()
 export class AuthService {
@@ -11,12 +12,13 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly i18n: I18nService,
   ) {}
 
   async register(dto: RegisterDto) {
     const existing = await this.usersService.findByEmail(dto.email);
     if (existing) {
-      throw new ConflictException('Email already registered');
+      throw new ConflictException(this.i18n.translateError('EMAIL_ALREADY_REGISTERED', 'Email already registered'));
     }
 
     const hashedPassword = await bcrypt.hash(dto.password, 12);
@@ -26,6 +28,7 @@ export class AuthService {
       password: hashedPassword,
       firstName: dto.firstName,
       lastName: dto.lastName,
+      locale: dto.locale ?? 'en',
     });
 
     const tokens = await this.generateTokens(user);
@@ -39,16 +42,20 @@ export class AuthService {
   async login(dto: LoginDto) {
     const user = await this.usersService.findByEmailWithPassword(dto.email);
     if (!user) {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new UnauthorizedException(
+        this.i18n.translateError('INVALID_EMAIL_OR_PASSWORD', 'Invalid email or password'),
+      );
     }
 
     const isValid = await bcrypt.compare(dto.password, user.password);
     if (!isValid) {
-      throw new UnauthorizedException('Invalid email or password');
+      throw new UnauthorizedException(
+        this.i18n.translateError('INVALID_EMAIL_OR_PASSWORD', 'Invalid email or password'),
+      );
     }
 
     if (!user.isActive) {
-      throw new UnauthorizedException('Account is deactivated');
+      throw new UnauthorizedException(this.i18n.translateError('ACCOUNT_DEACTIVATED', 'Account is deactivated'));
     }
 
     await this.usersService.updateLastLogin(user.id);
@@ -74,27 +81,27 @@ export class AuthService {
 
       return this.generateTokens(user);
     } catch {
-      throw new UnauthorizedException('Invalid or expired refresh token');
+      throw new UnauthorizedException(
+        this.i18n.translateError('INVALID_REFRESH_TOKEN', 'Invalid or expired refresh token'),
+      );
     }
   }
 
   async changePassword(userId: string, currentPassword: string, newPassword: string) {
-    const user = await this.usersService.findByEmailWithPassword(
-      (await this.usersService.findById(userId)).email,
-    );
+    const user = await this.usersService.findByEmailWithPassword((await this.usersService.findById(userId)).email);
     if (!user) {
-      throw new BadRequestException('User not found');
+      throw new BadRequestException(this.i18n.translateError('USER_NOT_FOUND', 'User not found'));
     }
 
     const isValid = await bcrypt.compare(currentPassword, user.password);
     if (!isValid) {
-      throw new BadRequestException('Current password is incorrect');
+      throw new BadRequestException(this.i18n.translateError('WRONG_PASSWORD', 'Current password is incorrect'));
     }
 
     const hashed = await bcrypt.hash(newPassword, 12);
     await this.usersService.updatePassword(userId, hashed);
 
-    return { message: 'Password changed successfully' };
+    return { message: this.i18n.translateError('PASSWORD_CHANGED', 'Password changed successfully') };
   }
 
   private async generateTokens(user: { id: string; email: string; role: string }) {

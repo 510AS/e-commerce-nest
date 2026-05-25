@@ -74,10 +74,7 @@ export class PromotionsController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Apply a coupon to an order' })
-  apply(
-    @CurrentUser('id') userId: string,
-    @Body() dto: ApplyCouponDto,
-  ) {
+  apply(@CurrentUser('id') userId: string, @Body() dto: ApplyCouponDto) {
     return this.promotionsService.applyCoupon(dto.code, dto.orderId, userId);
   }
 }

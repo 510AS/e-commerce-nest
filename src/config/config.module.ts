@@ -10,6 +10,7 @@ import {
   storageConfig,
   stripeConfig,
   meilisearchConfig,
+  i18nConfig,
 } from './index';
 
 @Module({
@@ -26,6 +27,7 @@ import {
         storageConfig,
         stripeConfig,
         meilisearchConfig,
+        i18nConfig,
       ],
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),
@@ -45,6 +47,9 @@ import {
         S3_BUCKET: Joi.string().optional(),
         STRIPE_SECRET_KEY: Joi.string().optional(),
         STRIPE_WEBHOOK_SECRET: Joi.string().optional(),
+        I18N_DEFAULT_LOCALE: Joi.string().default('en'),
+        I18N_SUPPORTED_LOCALES: Joi.string().default('en,ar,fr,es'),
+        I18N_FALLBACK_LOCALE: Joi.string().default('en'),
       }),
     }),
   ],

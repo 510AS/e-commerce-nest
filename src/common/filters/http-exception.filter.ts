@@ -12,12 +12,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const exceptionResponse = exception.getResponse();
 
-    const message =
+    const rawMessage =
       typeof exceptionResponse === 'string'
         ? exceptionResponse
         : (exceptionResponse as any).message || exception.message;
 
-    this.logger.warn(`[${status}] ${request.method} ${request.url}: ${Array.isArray(message) ? message.join(', ') : message}`);
+    const message = Array.isArray(rawMessage) ? rawMessage.join(', ') : rawMessage;
+
+    this.logger.warn(`[${status}] ${request.method} ${request.url}: ${message}`);
 
     response.status(status).json({
       statusCode: status,

@@ -1,6 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common'
-import { PrismaService } from '../../../database/prisma/prisma.service'
-import { CreateBusinessDto, UpdateBusinessDto } from './dto'
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '../../../database/prisma/prisma.service';
+import { CreateBusinessDto, UpdateBusinessDto } from './dto';
 
 @Injectable()
 export class BusinessService {
@@ -16,26 +16,26 @@ export class BusinessService {
         employeeCount: dto.employeeCount,
         industry: dto.industry,
       },
-    })
+    });
   }
 
   async update(id: string, dto: UpdateBusinessDto) {
-    await this.findById(id)
+    await this.findById(id);
     return this.prisma.businessAccount.update({
       where: { id },
       data: dto,
-    })
+    });
   }
 
   async verify(id: string, verified: boolean) {
-    await this.findById(id)
+    await this.findById(id);
     return this.prisma.businessAccount.update({
       where: { id },
       data: {
         isVerified: verified,
         verifiedAt: verified ? new Date() : null,
       },
-    })
+    });
   }
 
   async findById(id: string) {
@@ -45,16 +45,16 @@ export class BusinessService {
         purchaseOrders: true,
         quoteRequests: true,
       },
-    })
-    if (!business) throw new NotFoundException('Business account not found')
-    return business
+    });
+    if (!business) throw new NotFoundException('Business account not found');
+    return business;
   }
 
   async findByUserId(userId: string) {
     const business = await this.prisma.businessAccount.findUnique({
       where: { userId },
-    })
-    if (!business) throw new NotFoundException('Business account not found')
-    return business
+    });
+    if (!business) throw new NotFoundException('Business account not found');
+    return business;
   }
 }

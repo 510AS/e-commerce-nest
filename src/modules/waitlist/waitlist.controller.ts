@@ -13,10 +13,7 @@ export class WaitlistController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Join waitlist for a variant' })
-  join(
-    @CurrentUser('id') userId: string,
-    @Body() dto: JoinWaitlistDto,
-  ) {
+  join(@CurrentUser('id') userId: string, @Body() dto: JoinWaitlistDto) {
     return this.waitlistService.join(dto.variantId, userId, dto.email);
   }
 

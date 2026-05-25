@@ -18,10 +18,7 @@ export class PaymentsController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a payment intent' })
-  createPaymentIntent(
-    @CurrentUser('id') userId: string,
-    @Body() dto: CreatePaymentDto,
-  ) {
+  createPaymentIntent(@CurrentUser('id') userId: string, @Body() dto: CreatePaymentDto) {
     return this.paymentsService.createPaymentIntent(userId, dto);
   }
 
@@ -29,20 +26,14 @@ export class PaymentsController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Confirm a payment' })
-  confirmPayment(
-    @CurrentUser('id') userId: string,
-    @Body() dto: ConfirmPaymentDto,
-  ) {
+  confirmPayment(@CurrentUser('id') userId: string, @Body() dto: ConfirmPaymentDto) {
     return this.paymentsService.confirmPayment(userId, dto);
   }
 
   @Post('webhook')
   @Public()
   @ApiOperation({ summary: 'Stripe webhook endpoint' })
-  handleWebhook(
-    @Headers('stripe-signature') signature: string,
-    @Req() req: RawBodyRequest,
-  ) {
+  handleWebhook(@Headers('stripe-signature') signature: string, @Req() req: RawBodyRequest) {
     return this.paymentsService.handleStripeWebhook(signature, req.rawBody!);
   }
 
@@ -66,10 +57,7 @@ export class PaymentsController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'List all payments (admin only)' })
-  getAll(
-    @Query('page') page?: string,
-    @Query('limit') limit?: string,
-  ) {
+  getAll(@Query('page') page?: string, @Query('limit') limit?: string) {
     return this.paymentsService.getAll(Number(page) || 1, Number(limit) || 20);
   }
 }

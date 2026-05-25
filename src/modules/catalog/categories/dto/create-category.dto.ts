@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsBoolean, IsInt, Min, Matches } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsInt, Min, Matches, IsObject } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreateCategoryDto {
@@ -38,6 +38,13 @@ export class CreateCategoryDto {
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
+
+  @ApiPropertyOptional({
+    example: { name: { en: 'Electronics', ar: 'إلكترونيات' } },
+  })
+  @IsOptional()
+  @IsObject()
+  translations?: Record<string, Record<string, string>>;
 }
 
 export class UpdateCategoryDto {
@@ -79,4 +86,9 @@ export class UpdateCategoryDto {
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsObject()
+  translations?: Record<string, Record<string, string>>;
 }

@@ -39,4 +39,10 @@ export class UpdateUserDto {
   @IsOptional()
   @IsBoolean()
   isActive?: boolean;
+
+  @ApiPropertyOptional({ example: 'fr' })
+  @IsOptional()
+  @IsString()
+  @MaxLength(5)
+  locale?: string;
 }

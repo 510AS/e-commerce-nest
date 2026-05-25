@@ -2,7 +2,7 @@ import { Controller, Get, Post, Patch, Body, Param, Query } from '@nestjs/common
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { VendorsService } from './vendors.service';
 import { CreateVendorDto, UpdateVendorDto, UpdateVendorStatusDto, UpdateSubscriptionDto } from './dto';
-import { Public, Roles, CurrentUser } from '../../../common';
+import { Public, Roles, CurrentUser } from '../../common';
 
 @ApiTags('Vendors')
 @Controller('vendors')
@@ -20,11 +20,7 @@ export class VendorsController {
   @Get()
   @Public()
   @ApiOperation({ summary: 'List vendors' })
-  findAll(
-    @Query('status') status?: string,
-    @Query('page') page?: string,
-    @Query('limit') limit?: string,
-  ) {
+  findAll(@Query('status') status?: string, @Query('page') page?: string, @Query('limit') limit?: string) {
     return this.vendorsService.findAll({
       status: status ?? 'ACTIVE',
       page: page ? parseInt(page, 10) : undefined,

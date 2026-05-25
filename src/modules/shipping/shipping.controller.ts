@@ -28,10 +28,7 @@ export class ShippingController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a shipping method (admin only)' })
-  updateMethod(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() dto: Partial<CreateShippingMethodDto>,
-  ) {
+  updateMethod(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: Partial<CreateShippingMethodDto>) {
     return this.shippingService.updateMethod(id, dto);
   }
 
@@ -54,10 +51,7 @@ export class ShippingController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create shipment for an order (admin only)' })
-  createShipment(
-    @Param('orderId', ParseObjectIdPipe) orderId: string,
-    @Body('carrier') carrier: string,
-  ) {
+  createShipment(@Param('orderId', ParseObjectIdPipe) orderId: string, @Body('carrier') carrier: string) {
     return this.shippingService.createShipment(orderId, carrier);
   }
 
@@ -65,10 +59,7 @@ export class ShippingController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update shipment tracking info (admin only)' })
-  updateShipment(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() dto: UpdateShipmentDto,
-  ) {
+  updateShipment(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: UpdateShipmentDto) {
     return this.shippingService.updateShipment(id, dto);
   }
 

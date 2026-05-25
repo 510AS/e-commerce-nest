@@ -1,0 +1,20 @@
+{
+  "NOT_FOUND": "غير موجود",
+  "USER_NOT_FOUND": "المستخدم غير موجود",
+  "PRODUCT_NOT_FOUND": "المنتج غير موجود",
+  "CATEGORY_NOT_FOUND": "الفئة غير موجودة",
+  "EMAIL_ALREADY_REGISTERED": "البريد الإلكتروني مسجل بالفعل",
+  "INVALID_EMAIL_OR_PASSWORD": "بريد إلكتروني أو كلمة مرور غير صالحة",
+  "ACCOUNT_DEACTIVATED": "الحساب معطل",
+  "INVALID_REFRESH_TOKEN": "رمز التحديث غير صالح أو منتهي",
+  "WRONG_PASSWORD": "كلمة المرور الحالية غير صحيحة",
+  "PASSWORD_CHANGED": "تم تغيير كلمة المرور بنجاح",
+  "SLUG_EXISTS": "المعرف موجود بالفعل",
+  "SLUG_IN_USE": "المعرف مستخدم بالفعل",
+  "PARENT_NOT_FOUND": "الفئة الأصل غير موجودة",
+  "VARIANT_NOT_FOUND": "المتغير غير موجود",
+  "ORDER_NOT_FOUND": "الطلب غير موجود",
+  "CART_NOT_FOUND": "السلة غير موجودة",
+  "INVALID_CHECKOUT": "فشل التحقق من الدفع",
+  "UNAUTHORIZED": "غير مصرح"
+}

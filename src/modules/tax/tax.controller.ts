@@ -21,10 +21,7 @@ export class TaxController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a tax rule' })
-  updateRule(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() dto: UpdateTaxRuleDto,
-  ) {
+  updateRule(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: UpdateTaxRuleDto) {
     return this.taxService.updateRule(id, dto);
   }
 
@@ -75,10 +72,7 @@ export class TaxController {
   @Post('exemptions')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Register a tax exemption' })
-  registerExemption(
-    @CurrentUser('id') userId: string,
-    @Body() dto: TaxExemptionDto,
-  ) {
+  registerExemption(@CurrentUser('id') userId: string, @Body() dto: TaxExemptionDto) {
     return this.taxService.registerExemption(userId, dto);
   }
 

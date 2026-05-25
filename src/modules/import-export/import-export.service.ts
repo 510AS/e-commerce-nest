@@ -91,7 +91,13 @@ export class ImportExportService {
       {} as Record<string, string>,
     );
 
-    return { users: userCount, products: productCount, orders: orderCount, vendors: vendorCount, revenueByStatus: revenue };
+    return {
+      users: userCount,
+      products: productCount,
+      orders: orderCount,
+      vendors: vendorCount,
+      revenueByStatus: revenue,
+    };
   }
 
   private toCsv(rows: Record<string, any>[]): string {
@@ -99,9 +105,7 @@ export class ImportExportService {
     const headers = Object.keys(rows[0]);
     const escape = (val: any): string => {
       const str = String(val ?? '');
-      return str.includes(',') || str.includes('"') || str.includes('\n')
-        ? `"${str.replace(/"/g, '""')}"`
-        : str;
+      return str.includes(',') || str.includes('"') || str.includes('\n') ? `"${str.replace(/"/g, '""')}"` : str;
     };
     const headerLine = headers.join(',');
     const dataLines = rows.map((row) => headers.map((h) => escape(row[h])).join(','));

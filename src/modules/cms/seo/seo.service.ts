@@ -63,9 +63,7 @@ export class SeoService {
 
   getMetaTags(product: any) {
     const title = product.name;
-    const description = product.description
-      ? product.description.substring(0, 160)
-      : '';
+    const description = product.description ? product.description.substring(0, 160) : '';
     const canonical = `/products/${product.slug}`;
 
     let ogImage = '';

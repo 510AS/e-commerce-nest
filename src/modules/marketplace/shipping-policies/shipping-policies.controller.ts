@@ -13,10 +13,7 @@ export class ShippingPoliciesController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Upsert shipping policy for a vendor' })
-  upsert(
-    @Param('vendorId', ParseObjectIdPipe) vendorId: string,
-    @Body() dto: UpsertShippingPolicyDto,
-  ) {
+  upsert(@Param('vendorId', ParseObjectIdPipe) vendorId: string, @Body() dto: UpsertShippingPolicyDto) {
     return this.shippingPoliciesService.upsert(vendorId, dto);
   }
 

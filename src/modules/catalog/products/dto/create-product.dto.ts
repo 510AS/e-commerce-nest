@@ -35,6 +35,13 @@ export class CreateProductDto {
   @IsOptional()
   @IsEnum(ProductOwner)
   ownerType?: ProductOwner;
+
+  @ApiPropertyOptional({
+    example: { name: { en: 'iPhone 15', ar: 'آيفون ١٥' }, description: { en: 'Latest model', ar: 'أحدث طراز' } },
+  })
+  @IsOptional()
+  @IsObject()
+  translations?: Record<string, Record<string, string>>;
 }
 
 export class CreateVariantDto {
@@ -73,4 +80,9 @@ export class UpdateProductDto {
   @IsOptional()
   @IsString()
   categoryId?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsObject()
+  translations?: Record<string, Record<string, string>>;
 }

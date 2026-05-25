@@ -26,10 +26,7 @@ export class AuditController {
   @Get('entity/:entityType/:entityId')
   @Roles(['ADMIN'])
   @ApiOperation({ summary: 'Get audit logs for an entity' })
-  getByEntity(
-    @Param('entityType') entityType: string,
-    @Param('entityId', ParseObjectIdPipe) entityId: string,
-  ) {
+  getByEntity(@Param('entityType') entityType: string, @Param('entityId', ParseObjectIdPipe) entityId: string) {
     return this.auditService.getByEntity(entityType, entityId);
   }
 

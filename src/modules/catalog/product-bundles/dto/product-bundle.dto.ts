@@ -1,6 +1,4 @@
-import {
-  IsString, IsOptional, IsEnum, IsNumber, IsBoolean, IsDateString, IsObject,
-} from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsNumber, IsBoolean, IsDateString, IsObject } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum BundleTypeDto {

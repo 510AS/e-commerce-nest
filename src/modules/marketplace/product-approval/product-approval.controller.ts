@@ -21,10 +21,7 @@ export class ProductApprovalController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Approve a vendor product' })
-  approve(
-    @Param('productId', ParseObjectIdPipe) productId: string,
-    @CurrentUser('id') adminId: string,
-  ) {
+  approve(@Param('productId', ParseObjectIdPipe) productId: string, @CurrentUser('id') adminId: string) {
     return this.productApprovalService.approve(productId, adminId);
   }
 

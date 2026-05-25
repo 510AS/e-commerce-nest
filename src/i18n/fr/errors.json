@@ -1,0 +1,20 @@
+{
+  "NOT_FOUND": "Non trouvé",
+  "USER_NOT_FOUND": "Utilisateur non trouvé",
+  "PRODUCT_NOT_FOUND": "Produit non trouvé",
+  "CATEGORY_NOT_FOUND": "Catégorie non trouvée",
+  "EMAIL_ALREADY_REGISTERED": "Email déjà enregistré",
+  "INVALID_EMAIL_OR_PASSWORD": "Email ou mot de passe invalide",
+  "ACCOUNT_DEACTIVATED": "Compte désactivé",
+  "INVALID_REFRESH_TOKEN": "Token de rafraîchissement invalide ou expiré",
+  "WRONG_PASSWORD": "Mot de passe actuel incorrect",
+  "PASSWORD_CHANGED": "Mot de passe changé avec succès",
+  "SLUG_EXISTS": "Le slug existe déjà",
+  "SLUG_IN_USE": "Le slug est déjà utilisé",
+  "PARENT_NOT_FOUND": "Catégorie parente non trouvée",
+  "VARIANT_NOT_FOUND": "Variante non trouvée",
+  "ORDER_NOT_FOUND": "Commande non trouvée",
+  "CART_NOT_FOUND": "Panier non trouvé",
+  "INVALID_CHECKOUT": "Validation du paiement échouée",
+  "UNAUTHORIZED": "Non autorisé"
+}

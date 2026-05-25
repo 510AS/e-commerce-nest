@@ -1,10 +1,14 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../../../database/prisma/prisma.service';
 import { CreateProductDto, CreateVariantDto, UpdateProductDto } from './dto';
+import { I18nService } from '../../../i18n';
 
 @Injectable()
 export class ProductsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly i18n: I18nService,
+  ) {}
 
   async findAll(page = 1, limit = 20) {
     const skip = (page - 1) * limit;
@@ -13,7 +17,7 @@ export class ProductsService {
         skip,
         take: limit,
         include: {
-          category: { select: { id: true, name: true, slug: true } },
+          category: { select: { id: true, name: true, slug: true, translations: true } },
           variants: true,
           _count: { select: { variants: true } },
         },
@@ -21,31 +25,34 @@ export class ProductsService {
       }),
       this.prisma.product.count(),
     ]);
-    return { data: products, meta: { total, page, limit, totalPages: Math.ceil(total / limit) } };
+    return {
+      data: products.map((p) => this.mapProduct(p)),
+      meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
+    };
   }
 
   async findById(id: string) {
     const product = await this.prisma.product.findUnique({
       where: { id },
       include: {
-        category: { select: { id: true, name: true, slug: true } },
+        category: { select: { id: true, name: true, slug: true, translations: true } },
         variants: true,
       },
     });
     if (!product) throw new NotFoundException('Product not found');
-    return product;
+    return this.mapProduct(product);
   }
 
   async findBySlug(slug: string) {
     const product = await this.prisma.product.findUnique({
       where: { slug },
       include: {
-        category: { select: { id: true, name: true, slug: true } },
+        category: { select: { id: true, name: true, slug: true, translations: true } },
         variants: true,
       },
     });
     if (!product) throw new NotFoundException(`Product "${slug}" not found`);
-    return product;
+    return this.mapProduct(product);
   }
 
   async create(dto: CreateProductDto) {
@@ -59,6 +66,7 @@ export class ProductsService {
         description: dto.description,
         categoryId: dto.categoryId,
         ownerType: dto.ownerType ?? 'PLATFORM',
+        translations: (dto.translations as any) ?? {},
       },
       include: { category: { select: { id: true, name: true } } },
     });
@@ -105,5 +113,26 @@ export class ProductsService {
     const variant = await this.prisma.productVariant.findUnique({ where: { id: variantId } });
     if (!variant) throw new NotFoundException('Variant not found');
     return this.prisma.productVariant.update({ where: { id: variantId }, data: dto });
+  }
+
+  private mapProduct(p: any): any {
+    const translations = p.translations as Record<string, Record<string, string>> | null;
+    const name = this.i18n.resolveTranslation(translations?.['name'] as any) ?? p.name;
+    const description = this.i18n.resolveTranslation(translations?.['description'] as any) ?? p.description;
+
+    const category = p.category
+      ? {
+          id: p.category.id,
+          name: this.i18n.resolveTranslation((p.category.translations as any)?.['name']) ?? p.category.name,
+          slug: p.category.slug,
+        }
+      : undefined;
+
+    return {
+      ...p,
+      name,
+      description,
+      category,
+    };
   }
 }

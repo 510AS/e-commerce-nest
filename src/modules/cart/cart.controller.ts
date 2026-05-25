@@ -12,10 +12,7 @@ export class CartController {
   @Get()
   @Public()
   @ApiOperation({ summary: 'Get current cart' })
-  getCart(
-    @CurrentUser('id') userId?: string,
-    @Query('sessionId') sessionId?: string,
-  ) {
+  getCart(@CurrentUser('id') userId?: string, @Query('sessionId') sessionId?: string) {
     return this.cartService.getCart(userId, sessionId);
   }
 
@@ -23,14 +20,8 @@ export class CartController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Add item to cart' })
-  addItem(
-    @CurrentUser('id') userId: string,
-    @Body() dto: AddToCartDto,
-    @Query('sessionId') sessionId?: string,
-  ) {
-    return this.resolveCartAndAct(userId, sessionId, (cart) =>
-      this.cartService.addItem(cart.id, dto),
-    );
+  addItem(@CurrentUser('id') userId: string, @Body() dto: AddToCartDto, @Query('sessionId') sessionId?: string) {
+    return this.resolveCartAndAct(userId, sessionId, (cart) => this.cartService.addItem(cart.id, dto));
   }
 
   @Patch('items/:itemId')
@@ -57,40 +48,26 @@ export class CartController {
     @Param('itemId', ParseObjectIdPipe) itemId: string,
     @Query('sessionId') sessionId?: string,
   ) {
-    return this.resolveCartAndAct(userId, sessionId, (cart) =>
-      this.cartService.removeItem(cart.id, itemId),
-    );
+    return this.resolveCartAndAct(userId, sessionId, (cart) => this.cartService.removeItem(cart.id, itemId));
   }
 
   @Delete()
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Clear cart' })
-  clearCart(
-    @CurrentUser('id') userId: string,
-    @Query('sessionId') sessionId?: string,
-  ) {
-    return this.resolveCartAndAct(userId, sessionId, (cart) =>
-      this.cartService.clearCart(cart.id),
-    );
+  clearCart(@CurrentUser('id') userId: string, @Query('sessionId') sessionId?: string) {
+    return this.resolveCartAndAct(userId, sessionId, (cart) => this.cartService.clearCart(cart.id));
   }
 
   @Post('merge')
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Merge guest cart into user cart' })
-  mergeGuestCart(
-    @CurrentUser('id') userId: string,
-    @Body() dto: CartSessionDto,
-  ) {
+  mergeGuestCart(@CurrentUser('id') userId: string, @Body() dto: CartSessionDto) {
     return this.cartService.mergeGuestCart(dto.sessionId!, userId);
   }
 
-  private async resolveCartAndAct(
-    userId: string,
-    sessionId: string | undefined,
-    action: (cart: any) => Promise<any>,
-  ) {
+  private async resolveCartAndAct(userId: string, sessionId: string | undefined, action: (cart: any) => Promise<any>) {
     const cart = await this.cartService.getCart(userId, sessionId);
     if (!cart) throw new Error('Cart not found');
     return action(cart);

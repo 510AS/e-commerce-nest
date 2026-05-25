@@ -13,10 +13,7 @@ export class CheckoutController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Initiate checkout' })
-  initiate(
-    @CurrentUser('id') userId: string,
-    @Body() dto: InitiateCheckoutDto,
-  ) {
+  initiate(@CurrentUser('id') userId: string, @Body() dto: InitiateCheckoutDto) {
     return this.checkoutService.initiate(userId, dto);
   }
 

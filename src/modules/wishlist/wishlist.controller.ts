@@ -1,6 +1,4 @@
-import {
-  Controller, Get, Post, Patch, Delete, Body, Param, Query,
-} from '@nestjs/common';
+import { Controller, Get, Post, Patch, Delete, Body, Param, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { WishlistService } from './wishlist.service';
 import { CreateWishlistDto, UpdateWishlistDto, AddToWishlistDto } from './dto';
@@ -23,10 +21,7 @@ export class WishlistController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a wishlist' })
-  create(
-    @CurrentUser('id') userId: string,
-    @Body() dto: CreateWishlistDto,
-  ) {
+  create(@CurrentUser('id') userId: string, @Body() dto: CreateWishlistDto) {
     return this.wishlistService.create(userId, dto);
   }
 
@@ -42,10 +37,7 @@ export class WishlistController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update wishlist' })
-  updateWishlist(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() dto: UpdateWishlistDto,
-  ) {
+  updateWishlist(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: UpdateWishlistDto) {
     return this.wishlistService.updateWishlist(id, dto);
   }
 
@@ -68,10 +60,7 @@ export class WishlistController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Add item to wishlist' })
-  addItem(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() dto: AddToWishlistDto,
-  ) {
+  addItem(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: AddToWishlistDto) {
     return this.wishlistService.addItem(id, dto);
   }
 
@@ -79,10 +68,7 @@ export class WishlistController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Remove item from wishlist' })
-  removeItem(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Param('itemId', ParseObjectIdPipe) itemId: string,
-  ) {
+  removeItem(@Param('id', ParseObjectIdPipe) id: string, @Param('itemId', ParseObjectIdPipe) itemId: string) {
     return this.wishlistService.removeItem(id, itemId);
   }
 

@@ -1,1 +1,1 @@
-export { CreateTierPriceDto, UpdateTierPriceDto } from './tier-pricing.dto'
+export { CreateTierPriceDto, UpdateTierPriceDto } from './tier-pricing.dto';

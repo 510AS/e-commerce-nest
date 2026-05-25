@@ -1,6 +1,4 @@
-import {
-  Controller, Get, Post, Put, Delete, Body, Param, Query,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { ProductBundlesService } from './product-bundles.service';
 import { CreateProductBundleDto, UpdateProductBundleDto } from './dto';
@@ -37,10 +35,7 @@ export class ProductBundlesController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a product bundle' })
-  update(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @Body() dto: UpdateProductBundleDto,
-  ) {
+  update(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: UpdateProductBundleDto) {
     return this.productBundlesService.update(id, dto);
   }
 

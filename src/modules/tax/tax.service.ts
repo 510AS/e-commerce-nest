@@ -101,7 +101,7 @@ export class TaxService {
     const state = dto.state?.toUpperCase();
     const postalCode = dto.postalCode;
 
-    let matchedRule: typeof rules[number] | null | undefined = null;
+    let matchedRule: (typeof rules)[number] | null | undefined = null;
 
     if (state && postalCode) {
       matchedRule = rules.find(
@@ -117,19 +117,12 @@ export class TaxService {
 
     if (!matchedRule && state) {
       matchedRule = rules.find(
-        (r) =>
-          r.country.toUpperCase() === country &&
-          r.state?.toUpperCase() === state &&
-          !r.zipMin,
+        (r) => r.country.toUpperCase() === country && r.state?.toUpperCase() === state && !r.zipMin,
       );
     }
 
     if (!matchedRule) {
-      matchedRule = rules.find(
-        (r) =>
-          r.country.toUpperCase() === country &&
-          !r.state,
-      );
+      matchedRule = rules.find((r) => r.country.toUpperCase() === country && !r.state);
     }
 
     if (!matchedRule) {
@@ -151,10 +144,7 @@ export class TaxService {
       where: {
         userId,
         status: 'APPROVED',
-        OR: [
-          { validUntil: null },
-          { validUntil: { gte: new Date() } },
-        ],
+        OR: [{ validUntil: null }, { validUntil: { gte: new Date() } }],
       },
     });
 

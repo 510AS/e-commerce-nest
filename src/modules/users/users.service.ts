@@ -46,7 +46,7 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
-  async create(dto: CreateUserDto & { role?: string }) {
+  async create(dto: CreateUserDto & { role?: string; locale?: string }) {
     return this.prisma.user.create({
       data: {
         email: dto.email,
@@ -54,6 +54,7 @@ export class UsersService {
         firstName: dto.firstName,
         lastName: dto.lastName,
         role: (dto.role as any) || 'CUSTOMER',
+        locale: dto.locale ?? 'en',
       },
       omit: { password: true },
     });

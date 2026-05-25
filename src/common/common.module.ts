@@ -2,6 +2,7 @@ import { Module, MiddlewareConsumer, NestModule, ValidationPipe } from '@nestjs/
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE, APP_GUARD } from '@nestjs/core';
 import { CorrelationIdMiddleware } from './middleware/correlation-id.middleware';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
+import { PrismaExceptionFilter } from './filters/prisma-exception.filter';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -12,6 +13,10 @@ import { RolesGuard } from './guards/roles.guard';
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: PrismaExceptionFilter,
     },
     {
       provide: APP_INTERCEPTOR,

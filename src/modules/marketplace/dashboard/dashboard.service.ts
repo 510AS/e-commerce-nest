@@ -9,7 +9,16 @@ export class DashboardService {
     const [vendor, productCount, orderCount, metrics] = await Promise.all([
       this.prisma.vendor.findUnique({
         where: { id: vendorId },
-        select: { id: true, storeName: true, storeSlug: true, commissionRate: true, balance: true, totalEarnings: true, status: true, subscription: true },
+        select: {
+          id: true,
+          storeName: true,
+          storeSlug: true,
+          commissionRate: true,
+          balance: true,
+          totalEarnings: true,
+          status: true,
+          subscription: true,
+        },
       }),
       this.prisma.product.count({ where: { vendorId } }),
       this.prisma.vendorOrderSplit.count({ where: { vendorId } }),

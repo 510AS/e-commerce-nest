@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Patch, Param, Body } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger'
-import { BusinessService } from './business.service'
-import { CreateBusinessDto, UpdateBusinessDto, VerifyBusinessDto } from './dto'
-import { Roles, CurrentUser } from '../../../common'
+import { Controller, Get, Post, Patch, Param, Body } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { BusinessService } from './business.service';
+import { CreateBusinessDto, UpdateBusinessDto, VerifyBusinessDto } from './dto';
+import { Roles, CurrentUser } from '../../../common';
 
 @ApiTags('B2B Business')
 @Controller('b2b/business')
@@ -14,7 +14,7 @@ export class BusinessController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a business account' })
   create(@CurrentUser('id') userId: string, @Body() dto: CreateBusinessDto) {
-    return this.businessService.create(userId, dto)
+    return this.businessService.create(userId, dto);
   }
 
   @Get('me')
@@ -22,7 +22,7 @@ export class BusinessController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get current user business account' })
   findMe(@CurrentUser('id') userId: string) {
-    return this.businessService.findByUserId(userId)
+    return this.businessService.findByUserId(userId);
   }
 
   @Get(':id')
@@ -30,7 +30,7 @@ export class BusinessController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get business account by ID' })
   findById(@Param('id') id: string) {
-    return this.businessService.findById(id)
+    return this.businessService.findById(id);
   }
 
   @Patch(':id')
@@ -38,7 +38,7 @@ export class BusinessController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a business account' })
   update(@Param('id') id: string, @Body() dto: UpdateBusinessDto) {
-    return this.businessService.update(id, dto)
+    return this.businessService.update(id, dto);
   }
 
   @Patch(':id/verify')
@@ -46,6 +46,6 @@ export class BusinessController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Verify a business account' })
   verify(@Param('id') id: string, @Body() dto: VerifyBusinessDto) {
-    return this.businessService.verify(id, dto.verified)
+    return this.businessService.verify(id, dto.verified);
   }
 }

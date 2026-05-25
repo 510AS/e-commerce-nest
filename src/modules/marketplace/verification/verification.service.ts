@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ForbiddenException, ConflictException } from '@nestjs/common';
 import { PrismaService } from '../../../database/prisma/prisma.service';
-import { VendorsService } from '../vendors/vendors.service';
+import { VendorsService } from '../../vendors/vendors.service';
 import { SubmitVerificationDto, ReviewVerificationDto } from './dto';
 
 @Injectable()

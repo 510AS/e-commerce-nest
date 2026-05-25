@@ -1,8 +1,18 @@
 import { IsString, IsOptional, IsEnum, IsEmail, Matches } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-export enum VendorPlanDto { FREE = 'FREE', BASIC = 'BASIC', PRO = 'PRO', PREMIUM = 'PREMIUM' }
-export enum VendorStatusDto { PENDING = 'PENDING', ACTIVE = 'ACTIVE', SUSPENDED = 'SUSPENDED', REJECTED = 'REJECTED' }
+export enum VendorPlanDto {
+  FREE = 'FREE',
+  BASIC = 'BASIC',
+  PRO = 'PRO',
+  PREMIUM = 'PREMIUM',
+}
+export enum VendorStatusDto {
+  PENDING = 'PENDING',
+  ACTIVE = 'ACTIVE',
+  SUSPENDED = 'SUSPENDED',
+  REJECTED = 'REJECTED',
+}
 
 export class CreateVendorDto {
   @ApiProperty({ example: 'Awesome Store' })

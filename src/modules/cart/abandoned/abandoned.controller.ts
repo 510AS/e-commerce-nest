@@ -1,6 +1,4 @@
-import {
-  Controller, Get, Post, Param, Query,
-} from '@nestjs/common';
+import { Controller, Get, Post, Param, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AbandonedCartService } from './abandoned.service';
 import { Roles, ParseObjectIdPipe } from '../../../common';

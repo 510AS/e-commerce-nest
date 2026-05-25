@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Patch, Param, Query, Body } from '@nestjs/common'
-import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger'
-import { QuotesService } from './quotes.service'
-import { CreateQuoteDto, RespondQuoteDto } from './dto'
-import { Roles, CurrentUser } from '../../../common'
+import { Controller, Get, Post, Patch, Param, Query, Body } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import { QuotesService } from './quotes.service';
+import { CreateQuoteDto, RespondQuoteDto } from './dto';
+import { Roles, CurrentUser } from '../../../common';
 
 @ApiTags('B2B Quotes')
 @Controller('b2b/quotes')
@@ -14,7 +14,7 @@ export class QuotesController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a quote request' })
   create(@CurrentUser('id') userId: string, @Body() dto: CreateQuoteDto) {
-    return this.quotesService.create(userId, dto)
+    return this.quotesService.create(userId, dto);
   }
 
   @Get()
@@ -36,7 +36,7 @@ export class QuotesController {
       status,
       page: Number(page) || 1,
       limit: Number(limit) || 20,
-    })
+    });
   }
 
   @Get(':id')
@@ -44,19 +44,15 @@ export class QuotesController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Get a quote request by ID' })
   findOne(@Param('id') id: string) {
-    return this.quotesService.findById(id)
+    return this.quotesService.findById(id);
   }
 
   @Post(':id/respond')
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Respond to a quote request' })
-  respond(
-    @Param('id') id: string,
-    @CurrentUser('id') adminId: string,
-    @Body() dto: RespondQuoteDto,
-  ) {
-    return this.quotesService.respond(id, dto, adminId)
+  respond(@Param('id') id: string, @CurrentUser('id') adminId: string, @Body() dto: RespondQuoteDto) {
+    return this.quotesService.respond(id, dto, adminId);
   }
 
   @Post(':id/accept')
@@ -64,7 +60,7 @@ export class QuotesController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Accept a quote' })
   accept(@Param('id') id: string) {
-    return this.quotesService.accept(id)
+    return this.quotesService.accept(id);
   }
 
   @Post(':id/reject')
@@ -72,6 +68,6 @@ export class QuotesController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Reject a quote' })
   reject(@Param('id') id: string) {
-    return this.quotesService.reject(id)
+    return this.quotesService.reject(id);
   }
 }

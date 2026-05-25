@@ -6,3 +6,4 @@ export { featuresConfig } from './features.config';
 export { storageConfig } from './storage.config';
 export { stripeConfig } from './stripe.config';
 export { meilisearchConfig } from './meilisearch.config';
+export { i18nConfig } from './i18n.config';

@@ -1,6 +1,4 @@
-import {
-  Controller, Get, Post, Delete, Body, Query, Req,
-} from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Query, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { RecentlyViewedService } from './recently-viewed.service';
 import { TrackRecentlyViewedDto } from './dto';
@@ -25,10 +23,7 @@ export class RecentlyViewedController {
   @Post()
   @Public()
   @ApiOperation({ summary: 'Track a product view' })
-  track(
-    @Body() dto: TrackRecentlyViewedDto,
-    @CurrentUser('id') userId?: string,
-  ) {
+  track(@Body() dto: TrackRecentlyViewedDto, @CurrentUser('id') userId?: string) {
     return this.recentlyViewedService.track(dto.productId, userId, dto.sessionId);
   }
 
@@ -36,10 +31,7 @@ export class RecentlyViewedController {
   @Roles(['ADMIN', 'CUSTOMER'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Clear recently viewed history' })
-  clearHistory(
-    @CurrentUser('id') userId: string,
-    @Query('sessionId') sessionId?: string,
-  ) {
+  clearHistory(@CurrentUser('id') userId: string, @Query('sessionId') sessionId?: string) {
     return this.recentlyViewedService.clearHistory(userId, sessionId);
   }
 }

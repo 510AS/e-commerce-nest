@@ -12,11 +12,7 @@ export class VerificationController {
   @Post()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Submit KYC verification documents' })
-  submit(
-    @Param('vendorId') vendorId: string,
-    @CurrentUser('id') userId: string,
-    @Body() dto: SubmitVerificationDto,
-  ) {
+  submit(@Param('vendorId') vendorId: string, @CurrentUser('id') userId: string, @Body() dto: SubmitVerificationDto) {
     return this.verificationService.submit(vendorId, userId, dto);
   }
 
@@ -24,11 +20,7 @@ export class VerificationController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Review vendor verification (admin)' })
-  review(
-    @Param('vendorId') vendorId: string,
-    @CurrentUser('id') adminId: string,
-    @Body() dto: ReviewVerificationDto,
-  ) {
+  review(@Param('vendorId') vendorId: string, @CurrentUser('id') adminId: string, @Body() dto: ReviewVerificationDto) {
     return this.verificationService.review(vendorId, adminId, dto);
   }
 
