@@ -91,6 +91,23 @@ enum BundleType {
   CUSTOMIZABLE
 }
 
+enum POStatus {
+  DRAFT
+  SUBMITTED
+  APPROVED
+  REJECTED
+  CONVERTED
+  CANCELLED
+}
+
+enum QuoteStatus {
+  PENDING
+  RESPONDED
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
 model User {
   id        String    @id @default(uuid())
   email     String    @unique
@@ -104,6 +121,7 @@ model User {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
   addresses Address[]
+  business   BusinessAccount?
 }
 
 model Address {
@@ -261,6 +279,8 @@ model Product {
   recentlyViewed RecentlyViewed[]
   productRelations ProductRelation[] @relation("ProductRelations")
   relatedToRelations ProductRelation[] @relation("RelatedProducts")
+  quoteRequests  QuoteRequest[]
+  tierPrices     TierPrice[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
@@ -400,6 +420,7 @@ model Order {
   payment         Payment?
   shipment        Shipment?
   vendorSplits    VendorOrderSplit[]
+  purchaseOrders PurchaseOrder[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
@@ -692,6 +713,7 @@ model CustomerGroup {
   isDefault Boolean  @default(false)
   discount  Decimal? @db.Decimal(5, 2)
   conditions Json?
+  tierPrices  TierPrice[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -746,4 +768,69 @@ model AbandonedCart {
   lastRemindedAt  DateTime?
   recoveredAt     DateTime?
   createdAt       DateTime  @default(now())
+}
+
+model BusinessAccount {
+  id           String   @id @default(uuid())
+  userId       String   @unique
+  companyName  String
+  taxId        String?
+  creditLimit  Decimal? @db.Decimal(12, 2)
+  paymentTerms String?  @default("NET30")
+  isVerified   Boolean  @default(false)
+  verifiedAt   DateTime?
+  employeeCount Int?
+  industry     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id])
+  purchaseOrders PurchaseOrder[]
+  quoteRequests  QuoteRequest[]
+}
+
+model PurchaseOrder {
+  id         String          @id @default(uuid())
+  poNumber   String          @unique
+  businessId String
+  business   BusinessAccount @relation(fields: [businessId], references: [id])
+  orderId    String?
+  order      Order?          @relation(fields: [orderId], references: [id])
+  status     POStatus        @default(DRAFT)
+  subtotal   Decimal         @db.Decimal(12, 2)
+  taxAmount  Decimal         @db.Decimal(12, 2)
+  total      Decimal         @db.Decimal(12, 2)
+  notes      String?
+  approvedBy String?
+  approvedAt DateTime?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+}
+
+model QuoteRequest {
+  id          String          @id @default(uuid())
+  businessId  String
+  business    BusinessAccount @relation(fields: [businessId], references: [id])
+  productId   String?
+  product     Product?        @relation(fields: [productId], references: [id])
+  quantity    Int
+  targetPrice Decimal?        @db.Decimal(12, 2)
+  status      QuoteStatus     @default(PENDING)
+  response    String?
+  respondedBy String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+}
+
+model TierPrice {
+  id        String         @id @default(uuid())
+  productId String
+  product   Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  minQty    Int
+  maxQty    Int?
+  price     Decimal        @db.Decimal(10, 2)
+  groupId   String?
+  group     CustomerGroup? @relation(fields: [groupId], references: [id])
+  createdAt DateTime       @default(now())
+
+  @@index([productId])
 }
