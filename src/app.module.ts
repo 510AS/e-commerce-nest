@@ -28,8 +28,13 @@ import { WishlistModule } from './modules/wishlist/wishlist.module';
 import { WaitlistModule } from './modules/waitlist/waitlist.module';
 import { PromotionsModule } from './modules/promotions/promotions.module';
 import { TaxModule } from './modules/tax/tax.module';
+import { CustomerGroupsModule } from './modules/customer-groups/customer-groups.module';
+import { RecentlyViewedModule } from './modules/recently-viewed/recently-viewed.module';
+import { ProductRelationsModule } from './modules/catalog/product-relations/product-relations.module';
+import { ProductBundlesModule } from './modules/catalog/product-bundles/product-bundles.module';
+import { AbandonedCartModule } from './modules/cart/abandoned/abandoned.module';
 
 @Module({
-  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule, VendorsModule, VerificationModule, CommissionsModule, ProductApprovalModule, ShippingPoliciesModule, CheckoutSplitModule, SettlementsModule, DashboardModule, WishlistModule, WaitlistModule, PromotionsModule, TaxModule],
+  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule, VendorsModule, VerificationModule, CommissionsModule, ProductApprovalModule, ShippingPoliciesModule, CheckoutSplitModule, SettlementsModule, DashboardModule, WishlistModule, WaitlistModule, PromotionsModule, TaxModule, CustomerGroupsModule, RecentlyViewedModule, ProductRelationsModule, ProductBundlesModule, AbandonedCartModule],
 })
 export class AppModule {}

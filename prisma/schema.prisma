@@ -79,6 +79,18 @@ enum DiscountType {
   FIXED_AMOUNT
 }
 
+enum RelationType {
+  RELATED
+  CROSS_SELL
+  UP_SELL
+  BUNDLE
+}
+
+enum BundleType {
+  FIXED
+  CUSTOMIZABLE
+}
+
 model User {
   id        String    @id @default(uuid())
   email     String    @unique
@@ -246,6 +258,9 @@ model Product {
   cartItems   CartItem[]
   orderItems  OrderItem[]
   wishlistItems WishlistItem[]
+  recentlyViewed RecentlyViewed[]
+  productRelations ProductRelation[] @relation("ProductRelations")
+  relatedToRelations ProductRelation[] @relation("RelatedProducts")
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
@@ -300,6 +315,7 @@ model Cart {
   userId     String?
   sessionId  String?
   items      CartItem[]
+  abandonedCart AbandonedCart?
   couponCode String?
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
@@ -668,4 +684,66 @@ model PromotionUsage {
 
   @@index([promotionId, userId])
   @@unique([promotionId, userId, orderId])
+}
+
+model CustomerGroup {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  isDefault Boolean  @default(false)
+  discount  Decimal? @db.Decimal(5, 2)
+  conditions Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model RecentlyViewed {
+  id        String   @id @default(uuid())
+  userId    String?
+  sessionId String?
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  viewedAt  DateTime @default(now())
+
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([sessionId])
+}
+
+model ProductRelation {
+  id        String       @id @default(uuid())
+  productId String
+  product   Product      @relation("ProductRelations", fields: [productId], references: [id], onDelete: Cascade)
+  relatedId String
+  related   Product      @relation("RelatedProducts", fields: [relatedId], references: [id])
+  type      RelationType
+  sortOrder Int          @default(0)
+
+  @@unique([productId, relatedId, type])
+}
+
+model ProductBundle {
+  id          String       @id @default(uuid())
+  name        String
+  description String?
+  type        BundleType   @default(FIXED)
+  discountType DiscountType @default(PERCENTAGE)
+  discount    Decimal      @db.Decimal(10, 2)
+  items       Json
+  isActive    Boolean      @default(true)
+  validFrom   DateTime?
+  validUntil  DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model AbandonedCart {
+  id              String    @id @default(uuid())
+  cartId          String    @unique
+  cart            Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  userId          String?
+  email           String
+  reminderCount   Int       @default(0)
+  lastRemindedAt  DateTime?
+  recoveredAt     DateTime?
+  createdAt       DateTime  @default(now())
 }
