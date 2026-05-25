@@ -108,6 +108,7 @@ model Vendor {
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
   products      Product[]
+  vendorSplits   VendorOrderSplit[]
 
   @@index([userId])
   @@index([status])
@@ -331,6 +332,8 @@ model Order {
   discountAmount  Decimal     @db.Decimal(10, 2) @default(0)
   total           Decimal     @db.Decimal(10, 2)
   currencyCode    String      @default("USD")
+  platformItemsTotal Decimal? @db.Decimal(10, 2)
+  vendorItemsTotal  Decimal? @db.Decimal(10, 2)
   shippingAddress Json
   billingAddress  Json
   shippingMethod  String?
@@ -340,6 +343,7 @@ model Order {
   timeline        OrderTimeline[]
   payment         Payment?
   shipment        Shipment?
+  vendorSplits    VendorOrderSplit[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
@@ -479,4 +483,24 @@ model VendorMetrics {
   defectRate      Decimal @default(0) @db.Decimal(5, 2)
   fulfillmentRate Decimal @default(0) @db.Decimal(5, 2)
   updatedAt       DateTime @updatedAt
+}
+
+model VendorOrderSplit {
+  id              String      @id @default(uuid())
+  orderId         String
+  order           Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  vendorId        String
+  vendor          Vendor      @relation(fields: [vendorId], references: [id])
+  subtotal        Decimal     @db.Decimal(10, 2)
+  commission      Decimal     @db.Decimal(10, 2)
+  vendorEarnings  Decimal     @db.Decimal(10, 2)
+  platformEarnings Decimal    @db.Decimal(10, 2)
+  status          OrderStatus @default(PENDING)
+  payoutId        String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([orderId])
+  @@index([vendorId])
+  @@index([status])
 }

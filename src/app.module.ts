@@ -21,8 +21,10 @@ import { ShippingPoliciesModule } from './modules/marketplace/shipping-policies/
 import { VendorsModule } from './modules/vendors/vendors.module';
 import { VerificationModule } from './modules/marketplace/verification/verification.module';
 import { CommissionsModule } from './modules/marketplace/commissions/commissions.module';
+import { CheckoutSplitModule } from './modules/marketplace/checkout-split/checkout-split.module';
+import { SettlementsModule } from './modules/marketplace/settlements/settlements.module';
 
 @Module({
-  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule, VendorsModule, VerificationModule, CommissionsModule, ProductApprovalModule, ShippingPoliciesModule],
+  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule, VendorsModule, VerificationModule, CommissionsModule, ProductApprovalModule, ShippingPoliciesModule, CheckoutSplitModule, SettlementsModule],
 })
 export class AppModule {}
