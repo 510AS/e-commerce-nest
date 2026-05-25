@@ -24,8 +24,10 @@ import { CommissionsModule } from './modules/marketplace/commissions/commissions
 import { CheckoutSplitModule } from './modules/marketplace/checkout-split/checkout-split.module';
 import { SettlementsModule } from './modules/marketplace/settlements/settlements.module';
 import { DashboardModule } from './modules/marketplace/dashboard/dashboard.module';
+import { WishlistModule } from './modules/wishlist/wishlist.module';
+import { WaitlistModule } from './modules/waitlist/waitlist.module';
 
 @Module({
-  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule, VendorsModule, VerificationModule, CommissionsModule, ProductApprovalModule, ShippingPoliciesModule, CheckoutSplitModule, SettlementsModule, DashboardModule],
+  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule, VendorsModule, VerificationModule, CommissionsModule, ProductApprovalModule, ShippingPoliciesModule, CheckoutSplitModule, SettlementsModule, DashboardModule, WishlistModule, WaitlistModule],
 })
 export class AppModule {}
