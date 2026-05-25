@@ -242,6 +242,7 @@ model Order {
   items           OrderItem[]
   timeline        OrderTimeline[]
   payment         Payment?
+  shipment        Shipment?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
@@ -297,4 +298,58 @@ model Payment {
 
   @@index([orderId])
   @@index([status])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String
+  entityType String
+  entityId   String?
+  changes    Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+enum ShipmentStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  IN_TRANSIT
+  OUT_FOR_DELIVERY
+  DELIVERED
+  FAILED
+  RETURNED
+}
+
+model ShippingMethod {
+  id            String   @id @default(uuid())
+  name          String
+  carrier       String
+  estimatedDays Int
+  baseRate      Decimal  @db.Decimal(10, 2)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Shipment {
+  id             String          @id @default(uuid())
+  orderId        String          @unique
+  order          Order           @relation(fields: [orderId], references: [id])
+  carrier        String
+  trackingNumber String?
+  trackingUrl    String?
+  labelUrl       String?
+  status         ShipmentStatus  @default(PENDING)
+  shippedAt      DateTime?
+  deliveredAt    DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
 }

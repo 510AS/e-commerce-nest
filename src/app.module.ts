@@ -13,8 +13,11 @@ import { CartModule } from './modules/cart/cart.module';
 import { CheckoutModule } from './modules/checkout/checkout.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { PaymentsModule } from './modules/payments/payments.module';
+import { AuditModule } from './modules/audit/audit.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
+import { ShippingModule } from './modules/shipping/shipping.module';
 
 @Module({
-  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule],
+  imports: [AppConfigModule, CommonModule, PrismaModule, UsersModule, AuthModule, CategoriesModule, ProductsModule, InventoryModule, PricingModule, HealthModule, CartModule, CheckoutModule, OrdersModule, PaymentsModule, AuditModule, NotificationsModule, ShippingModule],
 })
 export class AppModule {}
