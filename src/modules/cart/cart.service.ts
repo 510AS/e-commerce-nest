@@ -148,8 +148,8 @@ export class CartService {
 
     for (const item of guestCart.items) {
       const existing = item.variantId
-        ? userCart.items.find((i: any) => i.variantId === item.variantId)
-        : userCart.items.find((i: any) => i.productId === item.productId && !i.variantId);
+        ? userCart.items.find((i: { variantId: string | null; productId: string }) => i.variantId === item.variantId)
+        : userCart.items.find((i: { variantId: string | null; productId: string }) => i.productId === item.productId && !i.variantId);
 
       if (existing) {
         await this.prisma.cartItem.update({

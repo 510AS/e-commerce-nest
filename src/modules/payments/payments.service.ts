@@ -180,7 +180,7 @@ export class PaymentsService {
 
     await this.prisma.payment.update({
       where: { id: payment.id },
-      data: { status: newStatus as any },
+      data: { status: newStatus },
     });
 
     return refund;

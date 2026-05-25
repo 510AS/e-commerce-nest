@@ -3,6 +3,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { CartService } from './cart.service';
 import { AddToCartDto, UpdateCartItemDto, CartSessionDto } from './dto';
 import { Public, Roles, CurrentUser, ParseObjectIdPipe } from '../../common';
+import { Cart } from '../../generated/prisma/client';
 
 @ApiTags('Cart')
 @Controller('cart')
@@ -67,7 +68,7 @@ export class CartController {
     return this.cartService.mergeGuestCart(dto.sessionId!, userId);
   }
 
-  private async resolveCartAndAct(userId: string, sessionId: string | undefined, action: (cart: any) => Promise<any>) {
+  private async resolveCartAndAct(userId: string, sessionId: string | undefined, action: (cart: Cart) => Promise<unknown>) {
     const cart = await this.cartService.getCart(userId, sessionId);
     if (!cart) throw new Error('Cart not found');
     return action(cart);

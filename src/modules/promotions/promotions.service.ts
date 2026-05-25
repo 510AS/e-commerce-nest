@@ -1,14 +1,14 @@
 import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreatePromotionDto, UpdatePromotionDto } from './dto';
-import { Prisma } from '../../generated/prisma/client';
+import { Prisma, Promotion } from '../../generated/prisma/client';
 
 @Injectable()
 export class PromotionsService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreatePromotionDto) {
-    const data: any = {
+    const data: Prisma.PromotionCreateInput = {
       name: dto.name,
       description: (dto as any).description,
       type: dto.type,
@@ -26,8 +26,11 @@ export class PromotionsService {
       validFrom: new Date(dto.validFrom),
       validUntil: new Date(dto.validUntil),
       conditions: dto.conditions,
-      vendorId: dto.vendorId,
     };
+
+    if (dto.vendorId) {
+      (data as any).vendor = { connect: { id: dto.vendorId } };
+    }
 
     return this.prisma.promotion.create({ data });
   }
@@ -35,9 +38,9 @@ export class PromotionsService {
   async findAll(filters: { type?: string; isActive?: boolean; page?: number; limit?: number }) {
     const { type, isActive, page = 1, limit = 20 } = filters;
     const skip = (page - 1) * limit;
-    const where: any = {};
+    const where: Prisma.PromotionWhereInput = {};
 
-    if (type) where.type = type;
+    if (type) where.type = type as any;
     if (isActive !== undefined) where.isActive = isActive;
 
     const [data, total] = await Promise.all([
@@ -76,7 +79,7 @@ export class PromotionsService {
   async update(id: string, dto: UpdatePromotionDto) {
     await this.findOne(id);
 
-    const data: any = { ...dto };
+    const data: Prisma.PromotionUpdateInput = { ...dto };
     if (dto.validFrom) data.validFrom = new Date(dto.validFrom);
     if (dto.validUntil) data.validUntil = new Date(dto.validUntil);
 
@@ -196,7 +199,7 @@ export class PromotionsService {
     };
   }
 
-  calculateDiscount(promotion: any, orderAmount: number): number {
+  calculateDiscount(promotion: Promotion, orderAmount: number): number {
     if (promotion.valueType === 'PERCENTAGE') {
       const discount = (orderAmount * Number(promotion.value)) / 100;
       if (promotion.maxDiscount && discount > Number(promotion.maxDiscount)) {
@@ -209,7 +212,7 @@ export class PromotionsService {
     return fixedDiscount > orderAmount ? orderAmount : fixedDiscount;
   }
 
-  resolveStacking(promotions: any[]): { applied: any[]; totalDiscount: number } {
+  resolveStacking(promotions: (Promotion & { _discount?: number })[]): { applied: (Promotion & { _discount?: number })[]; totalDiscount: number } {
     if (!promotions.length) return { applied: [], totalDiscount: 0 };
 
     const sorted = [...promotions].sort((a, b) => a.priority - b.priority);

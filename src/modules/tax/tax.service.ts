@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreateTaxRuleDto, UpdateTaxRuleDto, CalculateTaxDto, TaxExemptionDto } from './dto';
+import { Prisma } from '../../generated/prisma/client';
 
 @Injectable()
 export class TaxService {
@@ -60,10 +61,10 @@ export class TaxService {
     const limit = filter.limit ?? 20;
     const skip = (page - 1) * limit;
 
-    const where: any = {};
+    const where: Prisma.TaxRuleWhereInput = {};
     if (filter.country) where.country = filter.country;
     if (filter.state) where.state = filter.state;
-    if (filter.taxClass) where.taxClass = filter.taxClass;
+    if (filter.taxClass) where.taxClass = filter.taxClass as any;
     if (filter.isActive !== undefined) where.isActive = filter.isActive;
 
     const [data, total] = await Promise.all([

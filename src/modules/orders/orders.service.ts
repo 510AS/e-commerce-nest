@@ -4,7 +4,7 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { CartService } from '../cart/cart.service';
 import { AuditService } from '../audit/audit.service';
 import { OrderFilterDto } from './dto';
-import { OrderStatus } from '../../generated/prisma/client';
+import { OrderStatus, Prisma } from '../../generated/prisma/client';
 
 const VALID_TRANSITIONS = new Map<OrderStatus, OrderStatus[]>([
   ['PENDING', ['CONFIRMED', 'CANCELLED']],
@@ -122,7 +122,7 @@ export class OrdersService {
     const limit = filter.limit ?? 20;
     const skip = (page - 1) * limit;
 
-    const where: any = { userId };
+    const where: Prisma.OrderWhereInput = { userId };
     if (filter.status) {
       where.status = filter.status;
     }

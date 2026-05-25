@@ -53,7 +53,7 @@ export class InventoryService {
   async getLowStock() {
     return this.prisma.inventory.findMany({
       where: {
-        quantity: { lte: this.prisma.inventory.fields.lowStockAlert as any },
+        quantity: { lte: this.prisma.inventory.fields.lowStockAlert },
       },
       include: { variant: { select: { id: true, sku: true } } },
     });

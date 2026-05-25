@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
+import { Prisma } from '../../generated/prisma/client';
 
 @Injectable()
 export class RecentlyViewedService {
@@ -33,7 +34,7 @@ export class RecentlyViewedService {
   }
 
   async getRecent(userId?: string, sessionId?: string, limit: number = 20) {
-    const where: any = {};
+    const where: Prisma.RecentlyViewedWhereInput = {};
 
     if (userId) {
       where.userId = userId;

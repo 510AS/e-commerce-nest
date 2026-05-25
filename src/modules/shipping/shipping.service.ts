@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreateShippingMethodDto, UpdateShipmentDto, EstimateShippingDto } from './dto';
+import { Prisma } from '../../generated/prisma/client';
 
 @Injectable()
 export class ShippingService {
@@ -58,7 +59,7 @@ export class ShippingService {
     const shipment = await this.prisma.shipment.findUnique({ where: { id } });
     if (!shipment) throw new NotFoundException('Shipment not found');
 
-    const updateData: any = { status: 'SHIPPED', shippedAt: new Date() };
+    const updateData: Prisma.ShipmentUpdateInput = { status: 'SHIPPED', shippedAt: new Date() };
     if (trackingNumber) updateData.trackingNumber = trackingNumber;
     if (trackingUrl) updateData.trackingUrl = trackingUrl;
 

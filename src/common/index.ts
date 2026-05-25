@@ -7,4 +7,4 @@ export { LoggingInterceptor } from './interceptors/logging.interceptor';
 export { PaginationDto } from './dto/pagination.dto';
 export { ParseObjectIdPipe } from './pipes/parse-object-id.pipe';
 export { Public, Roles, CurrentUser, Lang } from './decorators';
-export { JwtAuthGuard, RolesGuard } from './guards';
+export { JwtAuthGuard, RolesGuard, ThrottlerBehindProxyGuard } from './guards';
