@@ -1,11 +1,15 @@
-import { IsString, IsOptional, IsEnum, IsNumber, IsObject, Min, Matches } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsObject, Matches } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
 
 export enum ProductStatus {
   DRAFT = 'DRAFT',
   ACTIVE = 'ACTIVE',
   ARCHIVED = 'ARCHIVED',
+}
+
+export enum ProductOwner {
+  PLATFORM = 'PLATFORM',
+  VENDOR = 'VENDOR',
 }
 
 export class CreateProductDto {
@@ -26,6 +30,11 @@ export class CreateProductDto {
   @ApiProperty({ example: 'uuid-of-category' })
   @IsString()
   categoryId: string;
+
+  @ApiPropertyOptional({ enum: ProductOwner, default: 'PLATFORM' })
+  @IsOptional()
+  @IsEnum(ProductOwner)
+  ownerType?: ProductOwner;
 }
 
 export class CreateVariantDto {
@@ -36,12 +45,6 @@ export class CreateVariantDto {
   @ApiProperty({ example: { color: 'Black', storage: '128GB' } })
   @IsObject()
   options: Record<string, string>;
-
-  @ApiProperty({ example: 999.99 })
-  @IsNumber()
-  @Min(0)
-  @Type(() => Number)
-  price: number;
 }
 
 export class UpdateProductDto {

@@ -58,6 +58,7 @@ export class ProductsService {
         slug: dto.slug,
         description: dto.description,
         categoryId: dto.categoryId,
+        ownerType: dto.ownerType ?? 'PLATFORM',
       },
       include: { category: { select: { id: true, name: true } } },
     });
@@ -90,7 +91,7 @@ export class ProductsService {
     if (existing) throw new ConflictException(`SKU "${dto.sku}" already exists`);
 
     return this.prisma.productVariant.create({
-      data: { ...dto, productId },
+      data: { productId, sku: dto.sku, options: dto.options },
     });
   }
 
