@@ -22,6 +22,21 @@ enum CheckoutStatus {
   EXPIRED
 }
 
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  STRIPE
+  PAYPAL
+}
+
 model User {
   id        String    @id @default(uuid())
   email     String    @unique
@@ -226,6 +241,7 @@ model Order {
   idempotencyKey  String?     @unique
   items           OrderItem[]
   timeline        OrderTimeline[]
+  payment         Payment?
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 
@@ -263,4 +279,22 @@ model OrderTimeline {
   createdAt DateTime    @default(now())
 
   @@index([orderId])
+}
+
+model Payment {
+  id                    String        @id @default(uuid())
+  orderId               String        @unique
+  order                 Order         @relation(fields: [orderId], references: [id])
+  amount                Decimal       @db.Decimal(10, 2)
+  currencyCode          String        @default("USD")
+  method                PaymentMethod @default(STRIPE)
+  status                PaymentStatus @default(PENDING)
+  stripePaymentIntentId String?
+  stripeClientSecret    String?
+  metadata              Json?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  @@index([orderId])
+  @@index([status])
 }
