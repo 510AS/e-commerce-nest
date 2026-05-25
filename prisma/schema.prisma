@@ -95,6 +95,7 @@ model Product {
   category    Category         @relation(fields: [categoryId], references: [id])
   variants    ProductVariant[]
   cartItems   CartItem[]
+  orderItems  OrderItem[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 
@@ -112,6 +113,7 @@ model ProductVariant {
   inventory Inventory?
   price     ProductPrice?
   cartItems  CartItem[]
+  orderItems OrderItem[]
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
 
@@ -173,6 +175,18 @@ model CartItem {
   @@unique([cartId, variantId])
 }
 
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUND_REQUESTED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
 model Checkout {
   id              String         @id @default(uuid())
   userId          String
@@ -191,4 +205,62 @@ model Checkout {
   notes           String?
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  orderNumber     String      @unique
+  userId          String
+  checkoutId      String?     @unique
+  status          OrderStatus @default(PENDING)
+  subtotal        Decimal     @db.Decimal(10, 2)
+  taxAmount       Decimal     @db.Decimal(10, 2)
+  shippingAmount  Decimal     @db.Decimal(10, 2)
+  discountAmount  Decimal     @db.Decimal(10, 2) @default(0)
+  total           Decimal     @db.Decimal(10, 2)
+  currencyCode    String      @default("USD")
+  shippingAddress Json
+  billingAddress  Json
+  shippingMethod  String?
+  notes           String?
+  idempotencyKey  String?     @unique
+  items           OrderItem[]
+  timeline        OrderTimeline[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([orderNumber])
+}
+
+model OrderItem {
+  id          String        @id @default(uuid())
+  orderId     String
+  order       Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   String
+  product     Product       @relation(fields: [productId], references: [id])
+  variantId   String?
+  variant     ProductVariant? @relation(fields: [variantId], references: [id])
+  productName String
+  sku         String
+  quantity    Int
+  unitPrice   Decimal       @db.Decimal(10, 2)
+  totalPrice  Decimal       @db.Decimal(10, 2)
+  ownerType   ProductOwner  @default(PLATFORM)
+  vendorId    String?
+  createdAt   DateTime      @default(now())
+
+  @@index([orderId])
+}
+
+model OrderTimeline {
+  id        String      @id @default(uuid())
+  orderId   String
+  order     Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status    OrderStatus
+  note      String?
+  createdAt DateTime    @default(now())
+
+  @@index([orderId])
 }
