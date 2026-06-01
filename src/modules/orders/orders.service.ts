@@ -112,7 +112,12 @@ export class OrdersService {
       changes: order,
     });
 
-    this.eventEmitter.emit('order.created', { orderId: order.id, orderNumber: order.orderNumber, userId, email: 'placeholder@email.com' });
+    this.eventEmitter.emit('order.created', {
+      orderId: order.id,
+      orderNumber: order.orderNumber,
+      userId,
+      email: 'placeholder@email.com',
+    });
 
     return order;
   }
@@ -194,7 +199,13 @@ export class OrdersService {
       changes: { from: order.status, to: dto.status, note: dto.note },
     });
 
-    this.eventEmitter.emit('order.status_changed', { orderId: order.id, orderNumber: order.orderNumber, userId: order.userId, email: 'placeholder@email.com', status: dto.status });
+    this.eventEmitter.emit('order.status_changed', {
+      orderId: order.id,
+      orderNumber: order.orderNumber,
+      userId: order.userId,
+      email: 'placeholder@email.com',
+      status: dto.status,
+    });
 
     return updated;
   }

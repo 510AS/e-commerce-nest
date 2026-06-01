@@ -11,6 +11,7 @@ import {
   stripeConfig,
   meilisearchConfig,
   i18nConfig,
+  graphqlConfig,
 } from './index';
 
 @Module({
@@ -28,6 +29,7 @@ import {
         stripeConfig,
         meilisearchConfig,
         i18nConfig,
+        graphqlConfig,
       ],
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid('development', 'production', 'test').default('development'),

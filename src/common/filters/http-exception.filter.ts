@@ -1,9 +1,12 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { I18nService } from '../../i18n';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);
+
+  constructor(private readonly i18n: I18nService) {}
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -17,7 +20,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         ? exceptionResponse
         : (exceptionResponse as any).message || exception.message;
 
-    const message = Array.isArray(rawMessage) ? rawMessage.join(', ') : rawMessage;
+    const extractedMessage = Array.isArray(rawMessage) ? rawMessage.join(', ') : rawMessage;
+    const message = this.i18n.translateError(extractedMessage, extractedMessage);
 
     this.logger.warn(`[${status}] ${request.method} ${request.url}: ${message}`);
 

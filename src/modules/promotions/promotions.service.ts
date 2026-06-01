@@ -212,7 +212,10 @@ export class PromotionsService {
     return fixedDiscount > orderAmount ? orderAmount : fixedDiscount;
   }
 
-  resolveStacking(promotions: (Promotion & { _discount?: number })[]): { applied: (Promotion & { _discount?: number })[]; totalDiscount: number } {
+  resolveStacking(promotions: (Promotion & { _discount?: number })[]): {
+    applied: (Promotion & { _discount?: number })[];
+    totalDiscount: number;
+  } {
     if (!promotions.length) return { applied: [], totalDiscount: 0 };
 
     const sorted = [...promotions].sort((a, b) => a.priority - b.priority);

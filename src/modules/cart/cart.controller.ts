@@ -68,7 +68,11 @@ export class CartController {
     return this.cartService.mergeGuestCart(dto.sessionId!, userId);
   }
 
-  private async resolveCartAndAct(userId: string, sessionId: string | undefined, action: (cart: Cart) => Promise<unknown>) {
+  private async resolveCartAndAct(
+    userId: string,
+    sessionId: string | undefined,
+    action: (cart: Cart) => Promise<unknown>,
+  ) {
     const cart = await this.cartService.getCart(userId, sessionId);
     if (!cart) throw new Error('Cart not found');
     return action(cart);

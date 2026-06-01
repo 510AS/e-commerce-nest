@@ -7,3 +7,4 @@ export { storageConfig } from './storage.config';
 export { stripeConfig } from './stripe.config';
 export { meilisearchConfig } from './meilisearch.config';
 export { i18nConfig } from './i18n.config';
+export { graphqlConfig } from './graphql.config';

@@ -52,9 +52,9 @@ describe('CartService', () => {
   it('throws when cart not found on addItem', async () => {
     prisma.cart.findUnique.mockResolvedValue(null);
 
-    await expect(
-      service.addItem('cart1', { productId: 'p1', variantId: 'v1', quantity: 1 }),
-    ).rejects.toBeInstanceOf(NotFoundException);
+    await expect(service.addItem('cart1', { productId: 'p1', variantId: 'v1', quantity: 1 })).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
   });
 
   it('increments quantity when item exists', async () => {

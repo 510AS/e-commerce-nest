@@ -12,10 +12,12 @@ import { ThrottlerBehindProxyGuard } from './guards/throttle-behind-proxy.guard'
 
 @Module({
   imports: [
-    ThrottlerModule.forRoot([{
-      ttl: 60000,
-      limit: 100,
-    }]),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000,
+        limit: 100,
+      },
+    ]),
   ],
   providers: [
     {

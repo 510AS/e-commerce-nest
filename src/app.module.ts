@@ -41,6 +41,7 @@ import { TierPricingModule } from './modules/b2b/tier-pricing';
 import { ImportExportModule } from './modules/import-export/import-export.module';
 import { SeoModule } from './modules/cms/seo/seo.module';
 import { SocialAuthModule } from './modules/auth/social/social-auth.module';
+import { GqlModule } from './modules/graphql';
 
 @Module({
   imports: [
@@ -86,6 +87,7 @@ import { SocialAuthModule } from './modules/auth/social/social-auth.module';
     ImportExportModule,
     SeoModule,
     SocialAuthModule,
+    ...(process.env.FEATURE_GRAPHQL !== 'false' ? [GqlModule] : []),
   ],
 })
 export class AppModule {}
