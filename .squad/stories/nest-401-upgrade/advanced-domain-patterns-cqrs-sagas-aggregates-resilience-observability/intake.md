@@ -12,7 +12,7 @@ This is **not** an implementation prompt. It is the input to the plan-generation
 
 ## Feature
 
-- **Feature name (display):**
+- **Feature name (display):** NestJS 401 — Advanced Domain Patterns
 - **Feature slug (folder under `plans/`):** `nest-401-upgrade`
 
 ## Tracker (metadata only)
@@ -43,7 +43,17 @@ Advanced Domain Patterns: CQRS, Sagas, Aggregates, Resilience, Observability
 *(Paste the full work item description. Prefilled when fetched from a tracker.)*
 
 ```
+Upgrade the codebase from NestJS 301 (infrastructure patterns) to 401 (domain patterns):
 
+1. CQRS: Convert the checkout flow from procedural service calls to Command/Query/Event/Saga pattern using @nestjs/cqrs.
+
+2. Domain Aggregates: Create domain models with invariants (ProductAggregate) that enforce business rules.
+
+3. Saga with Compensation: Orchestrate multi-step workflows with automatic rollback on failure.
+
+4. Resilience: Add circuit breakers for external service calls (Stripe, Redis).
+
+5. Observability: Structured JSON logging with correlation IDs and trace spans.
 ```
 
 ---
@@ -53,7 +63,17 @@ Advanced Domain Patterns: CQRS, Sagas, Aggregates, Resilience, Observability
 *(Checklist, bullets, Gherkin, etc. Prefilled for Azure DevOps when the work item has acceptance criteria.)*
 
 ```
-
+- [ ] CqrsModule.forRoot() registered in app.module.ts
+- [ ] Checkout flow converted to Command/Event/Saga pattern
+- [ ] CheckoutSaga orchestrates checkout with compensation
+- [ ] CommandBus wired into CheckoutController
+- [ ] ProductAggregate enforces domain invariants
+- [ ] @CircuitBreaker applied to Stripe calls in PaymentsService
+- [ ] ObservabilityService provides structured JSON logging
+- [ ] ObservabilityService injected into CQRS handlers
+- [ ] npx tsc --noEmit passes with zero errors
+- [ ] npm run lint passes (no new errors)
+- [ ] All existing endpoints continue working
 ```
 
 ---
@@ -72,12 +92,12 @@ Place files in `attachments/` next to this `intake.md`, then list them here so t
 
 ## Dependencies
 
-- **Blocked by / related ids:** (tracker ids only; optional short note)
-- **Depends on code areas or other stories:**
+- **Blocked by / related ids:** Story 06 (all 11 NestJS 301 patterns complete)
+- **Depends on code areas or other stories:** CheckoutService, CheckoutController, PaymentsService, ProductsService, InventoryService, OrdersService, PrismaService, @nestjs/cqrs package
 
 ## Extra notes (optional)
 
-- Anything not captured above (e.g. chat context) — keep short.
+- Story 07 implemented: CQRS checkout saga, ProductAggregate, CircuitBreaker, ObservabilityService. All wired into running code paths (Steps 46-47).
 
 ## Technical hints (optional)
 

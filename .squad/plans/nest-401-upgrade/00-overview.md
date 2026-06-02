@@ -6,8 +6,10 @@ Entry point for the **nest-401-upgrade** feature. Stories execute in order by th
 
 | NN | File | Title | Tracker id | Depends on |
 |----|------|-------|------------|------------|
-| _add rows as stories are planned_ |
+| 07 | `07-story-domain-patterns.md` | CQRS, Sagas, Aggregates, Resilience, Observability | — | Story 06 |
 
 ## Dependency notes
 
-_Describe sequencing, shared contracts, or cross-feature dependencies here._
+- Story 07 depends on Story 06 (all 11 NestJS 301 patterns complete — DI, dynamic modules, forwardRef, ModuleRef, LazyModuleLoader, etc.).
+- The checkout saga replaces the synchronous `CheckoutService.initiate()` flow with CQRS commands, events, and compensation.
+- All remaining 401 patterns (OrderAggregate, Redis circuit breaker, Meilisearch circuit breaker) can be added in follow-up stories.
