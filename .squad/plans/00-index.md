@@ -6,3 +6,4 @@ One row per feature folder under `.squad/plans/`. `NN` continues as a global exe
 |---------|----------|----------|
 | i18n-graphql | Multi-language i18n support + GraphQL integration | 01–02 |
 | nest-arch-refactor | NestJS architecture refactoring — all 11 advanced NestJS patterns | 03–06 |
+| nest-401-upgrade | Advanced domain patterns: CQRS, sagas, aggregates, resilience, observability | 07–

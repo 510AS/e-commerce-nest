@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppConfigModule } from './config/config.module';
 import { PrismaModule } from './database/prisma/prisma.module';
@@ -41,6 +42,7 @@ import { GqlModule } from './modules/graphql';
 
 @Module({
   imports: [
+    CqrsModule.forRoot(),
     I18nModule,
     RequestContextModule,
     InfrastructureModule,

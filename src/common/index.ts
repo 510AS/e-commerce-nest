@@ -10,6 +10,7 @@ export { Public, Roles, CurrentUser, Lang } from './decorators';
 export { Subscriber, SUBSCRIBER_EVENT } from './decorators/subscriber.decorator';
 export { SubscriberExplorer } from './discovery/subscriber-explorer.service';
 export { DiscoveryModule } from './discovery/discovery.module';
+export { CircuitBreaker } from './resilience';
 export { JwtAuthGuard, RolesGuard, ThrottlerBehindProxyGuard } from './guards';
 export { RequestContextService } from './context/request-context.service';
 export { ExecutionContextAdapter } from './context/execution-context.adapter';
