@@ -33,6 +33,7 @@ import { ProductRelationsModule } from './modules/catalog/product-relations/prod
 import { ProductBundlesModule } from './modules/catalog/product-bundles/product-bundles.module';
 import { AbandonedCartModule } from './modules/cart/abandoned/abandoned.module';
 import { B2BModule } from './modules/b2b';
+import { LazyModulesModule } from './modules/lazy';
 import { ImportExportModule } from './modules/import-export/import-export.module';
 import { SeoModule } from './modules/cms/seo/seo.module';
 import { SocialAuthModule } from './modules/auth/social/social-auth.module';
@@ -45,6 +46,7 @@ import { GqlModule } from './modules/graphql';
     InfrastructureModule,
     EventEmitterModule.forRoot(),
     DiscoveryModule,
+    LazyModulesModule,
     AppConfigModule,
     CommonModule,
     PrismaModule,

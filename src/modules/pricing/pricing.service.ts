@@ -1,10 +1,25 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, Inject, forwardRef } from '@nestjs/common';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreatePriceDto, UpdatePriceDto } from './dto';
+import { OrdersService } from '../orders/orders.service';
 
 @Injectable()
 export class PricingService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(forwardRef(() => OrdersService))
+    private readonly ordersService: OrdersService,
+  ) {}
+
+  async calculateLoyaltyDiscount(userId: string, subtotal: number): Promise<number> {
+    const recentOrders = await this.prisma.order.count({
+      where: { userId, status: 'DELIVERED' },
+    });
+
+    if (recentOrders >= 10) return Math.round(subtotal * 0.05 * 100) / 100;
+    if (recentOrders >= 5) return Math.round(subtotal * 0.02 * 100) / 100;
+    return 0;
+  }
 
   async getByVariant(variantId: string) {
     const price = await this.prisma.productPrice.findUnique({

@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
-import { DiscoveryService, MetadataScanner } from '@nestjs/core';
+import { DiscoveryService, MetadataScanner, ModuleRef } from '@nestjs/core';
 import { SUBSCRIBER_EVENT } from '../decorators/subscriber.decorator';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
@@ -17,6 +17,7 @@ export class SubscriberExplorer implements OnModuleInit {
     private readonly discoveryService: DiscoveryService,
     private readonly metadataScanner: MetadataScanner,
     private readonly eventEmitter: EventEmitter2,
+    private readonly moduleRef: ModuleRef,
   ) {}
 
   onModuleInit() {
@@ -46,5 +47,7 @@ export class SubscriberExplorer implements OnModuleInit {
         `Registered subscriber: ${handler.instance.constructor.name}.${handler.methodName} → "${handler.event}"`,
       );
     }
+
+    this.logger.log(`SubscriberExplorer initialized with ${handlers.length} handlers via ModuleRef`);
   }
 }
