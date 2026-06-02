@@ -2,6 +2,7 @@ import { Injectable, NotFoundException, ConflictException } from '@nestjs/common
 import { PrismaService } from '../../../database/prisma/prisma.service';
 import { CreateProductDto, CreateVariantDto, UpdateProductDto } from './dto';
 import { I18nService } from '../../../i18n';
+import { ProductAggregate } from '../../../core';
 
 @Injectable()
 export class ProductsService {
@@ -59,13 +60,15 @@ export class ProductsService {
     const existing = await this.prisma.product.findUnique({ where: { slug: dto.slug } });
     if (existing) throw new ConflictException(`Slug "${dto.slug}" already exists`);
 
+    const aggregate = new ProductAggregate('temp', dto.name, dto.slug, 'DRAFT', dto.ownerType ?? 'PLATFORM', []);
+
     return this.prisma.product.create({
       data: {
         name: dto.name,
         slug: dto.slug,
         description: dto.description,
         categoryId: dto.categoryId,
-        ownerType: dto.ownerType ?? 'PLATFORM',
+        ownerType: aggregate.ownerType,
         translations: (dto.translations as any) ?? {},
       },
       include: { category: { select: { id: true, name: true } } },

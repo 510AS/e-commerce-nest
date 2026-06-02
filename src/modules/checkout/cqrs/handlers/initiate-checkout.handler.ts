@@ -3,6 +3,7 @@ import { InitiateCheckoutCommand } from '../commands/initiate-checkout.command';
 import { CheckoutInitiatedEvent } from '../events/checkout-initiated.event';
 import { PrismaService } from '../../../../database/prisma/prisma.service';
 import { Logger, NotFoundException, BadRequestException } from '@nestjs/common';
+import { ObservabilityService } from '../../../../core/observability/observability.service';
 
 @CommandHandler(InitiateCheckoutCommand)
 export class InitiateCheckoutHandler implements ICommandHandler<InitiateCheckoutCommand> {
@@ -11,10 +12,13 @@ export class InitiateCheckoutHandler implements ICommandHandler<InitiateCheckout
   constructor(
     private readonly prisma: PrismaService,
     private readonly eventBus: EventBus,
+    private readonly obs: ObservabilityService,
   ) {}
 
   async execute(command: InitiateCheckoutCommand): Promise<string> {
     const { userId, cartId, billingAddress, shippingAddress, shippingMethod, idempotencyKey } = command;
+
+    const spanId = this.obs.trace('checkout.initiate', command.idempotencyKey ?? userId);
 
     if (idempotencyKey) {
       const existing = await this.prisma.checkout.findUnique({
@@ -68,7 +72,7 @@ export class InitiateCheckoutHandler implements ICommandHandler<InitiateCheckout
       },
     });
 
-    this.logger.log(`Checkout ${checkout.id} initiated for user ${userId}`);
+    this.logger.log(`[${spanId}] Checkout ${checkout.id} initiated for user ${userId}`);
 
     this.eventBus.publish(
       new CheckoutInitiatedEvent(

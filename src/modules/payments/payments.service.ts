@@ -4,6 +4,7 @@ import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreatePaymentDto, ConfirmPaymentDto } from './dto';
 import Stripe from 'stripe';
 import { STRIPE_CLIENT } from '../../common/tokens';
+import { CircuitBreaker } from '../../common/resilience';
 
 @Injectable()
 export class PaymentsService {
@@ -13,6 +14,7 @@ export class PaymentsService {
     @Inject(STRIPE_CLIENT) private readonly stripe: InstanceType<typeof Stripe>,
   ) {}
 
+  @CircuitBreaker({ name: 'stripe-create-payment', threshold: 3, resetTimeout: 30000 })
   async createPaymentIntent(userId: string, dto: CreatePaymentDto) {
     const order = await this.prisma.order.findUnique({
       where: { id: dto.orderId },

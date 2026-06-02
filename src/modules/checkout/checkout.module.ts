@@ -6,6 +6,7 @@ import { CheckoutFacade } from './checkout.facade';
 import { CartModule } from '../cart/cart.module';
 import { InventoryModule } from '../inventory/inventory.module';
 import { PricingModule } from '../pricing/pricing.module';
+import { ObservabilityService } from '../../core/observability/observability.service';
 import {
   InitiateCheckoutHandler,
   ReserveInventoryHandler,
@@ -19,7 +20,7 @@ const CommandHandlers = [InitiateCheckoutHandler, ReserveInventoryHandler, Relea
 @Module({
   imports: [CqrsModule, CartModule, InventoryModule, PricingModule],
   controllers: [CheckoutController],
-  providers: [CheckoutService, CheckoutFacade, CheckoutSaga, ...CommandHandlers],
+  providers: [CheckoutService, CheckoutFacade, CheckoutSaga, ObservabilityService, ...CommandHandlers],
   exports: [CheckoutService, CheckoutFacade],
 })
 export class CheckoutModule {}
