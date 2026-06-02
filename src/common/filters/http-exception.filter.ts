@@ -1,12 +1,16 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpException, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { I18nService } from '../../i18n';
+import { RequestContextService } from '../context/request-context.service';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);
 
-  constructor(private readonly i18n: I18nService) {}
+  constructor(
+    private readonly i18n: I18nService,
+    private readonly ctx: RequestContextService,
+  ) {}
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -29,7 +33,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       statusCode: status,
       error: exception.name,
       message,
-      correlationId: request.headers['x-correlation-id'] || '',
+      correlationId: this.ctx.correlationId,
       timestamp: new Date().toISOString(),
       path: request.url,
     });

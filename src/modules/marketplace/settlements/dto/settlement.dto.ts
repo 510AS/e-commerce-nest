@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsNumber, Min, IsDateString } from 'class-validator';
+import { IsString, IsOptional, IsDateString } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class CreatePayoutDto {

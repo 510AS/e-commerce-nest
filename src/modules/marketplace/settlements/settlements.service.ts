@@ -33,7 +33,7 @@ export class SettlementsService {
     };
   }
 
-  async createPayout(vendorId: string, _adminId: string) {
+  async createPayout(vendorId: string) {
     const vendor = await this.vendorsService.findById(vendorId);
 
     const splits = await this.prisma.orderItem.findMany({
@@ -174,7 +174,7 @@ export class SettlementsService {
     };
   }
 
-  async markPaid(dto: MarkPaidDto, _adminId: string) {
+  async markPaid(dto: MarkPaidDto) {
     if (!dto.payoutId.startsWith('PAY-')) {
       throw new NotFoundException('Payout not found');
     }

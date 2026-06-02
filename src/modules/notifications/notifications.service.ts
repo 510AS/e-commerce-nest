@@ -1,22 +1,34 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { OnEvent } from '@nestjs/event-emitter';
+import { Injectable, Logger, Inject, Optional } from '@nestjs/common';
 import { SendEmailDto } from './dto';
 import { I18nService } from '../../i18n';
+import { NotificationsModuleOptions } from './notifications.module';
+import { Subscriber } from '../../common/decorators/subscriber.decorator';
 
 @Injectable()
 export class NotificationsService {
   private readonly logger = new Logger(NotificationsService.name);
 
-  constructor(private readonly i18n: I18nService) {}
+  constructor(
+    private readonly i18n: I18nService,
+    @Optional() @Inject('NOTIFICATIONS_OPTIONS') private readonly options?: NotificationsModuleOptions,
+  ) {}
 
   async sendEmail(dto: SendEmailDto) {
+    const transport = this.options?.transport ?? 'log';
+    if (transport === 'log') {
+      this.logger.log(
+        `[EMAIL] To: ${dto.to}, Subject: ${dto.subject}, Template: ${dto.template}, Data: ${JSON.stringify(dto.data)}`,
+      );
+      return { sent: true, to: dto.to, template: dto.template, transport: 'log' };
+    }
+    this.logger.warn(`Email transport "${transport}" not implemented — falling back to log`);
     this.logger.log(
       `[EMAIL] To: ${dto.to}, Subject: ${dto.subject}, Template: ${dto.template}, Data: ${JSON.stringify(dto.data)}`,
     );
-    return { sent: true, to: dto.to, template: dto.template };
+    return { sent: true, to: dto.to, template: dto.template, transport: 'log' };
   }
 
-  @OnEvent('order.created')
+  @Subscriber('order.created')
   async handleOrderCreated(payload: {
     orderId: string;
     orderNumber: string;
@@ -34,7 +46,7 @@ export class NotificationsService {
     });
   }
 
-  @OnEvent('order.status_changed')
+  @Subscriber('order.status_changed')
   async handleOrderStatusChanged(payload: {
     orderId: string;
     orderNumber: string;
@@ -53,7 +65,7 @@ export class NotificationsService {
     });
   }
 
-  @OnEvent('checkout.abandoned')
+  @Subscriber('checkout.abandoned')
   async handleCheckoutAbandoned(payload: { checkoutId: string; userId: string; email: string; locale?: string }) {
     const locale = payload.locale ?? 'en';
     const subject = this.i18n.translateEmail('abandoned-cart', 'abandoned_cart', 'You left items in your cart');

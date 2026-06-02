@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Delete, Body, Query, Req } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Body, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { RecentlyViewedService } from './recently-viewed.service';
 import { TrackRecentlyViewedDto } from './dto';

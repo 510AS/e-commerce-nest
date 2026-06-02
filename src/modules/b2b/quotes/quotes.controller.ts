@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Patch, Param, Query, Body } from '@nestjs/common';
+import { Controller, Get, Post, Param, Query, Body } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
 import { QuotesService } from './quotes.service';
 import { CreateQuoteDto, RespondQuoteDto } from './dto';

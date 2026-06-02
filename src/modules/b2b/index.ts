@@ -1,4 +1,9 @@
+export { B2BModule } from './b2b.module';
 export { BusinessModule } from './business';
+export { BusinessService } from './business';
 export { PurchaseOrdersModule } from './purchase-orders';
+export { PurchaseOrdersService } from './purchase-orders';
 export { QuotesModule } from './quotes';
+export { QuotesService } from './quotes';
 export { TierPricingModule } from './tier-pricing';
+export { TierPricingService } from './tier-pricing';

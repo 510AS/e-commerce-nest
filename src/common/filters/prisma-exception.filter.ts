@@ -1,10 +1,13 @@
 import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus, Logger } from '@nestjs/common';
 import { Prisma } from '../../generated/prisma/client';
 import { Request, Response } from 'express';
+import { RequestContextService } from '../context/request-context.service';
 
 @Catch(Prisma.PrismaClientKnownRequestError)
 export class PrismaExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(PrismaExceptionFilter.name);
+
+  constructor(private readonly ctx: RequestContextService) {}
 
   catch(exception: Prisma.PrismaClientKnownRequestError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -39,7 +42,7 @@ export class PrismaExceptionFilter implements ExceptionFilter {
       statusCode: status,
       error: 'Database Error',
       message,
-      correlationId: request.headers['x-correlation-id'] || '',
+      correlationId: this.ctx.correlationId,
       timestamp: new Date().toISOString(),
       path: request.url,
     });

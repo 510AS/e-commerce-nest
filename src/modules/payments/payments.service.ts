@@ -1,21 +1,17 @@
-import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../database/prisma/prisma.service';
 import { CreatePaymentDto, ConfirmPaymentDto } from './dto';
 import Stripe from 'stripe';
+import { STRIPE_CLIENT } from '../../common/tokens';
 
 @Injectable()
 export class PaymentsService {
-  private stripe: any;
-
   constructor(
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
-  ) {
-    this.stripe = new Stripe(this.configService.get<string>('stripe.secretKey')!, {
-      apiVersion: '2026-04-22.dahlia',
-    });
-  }
+    @Inject(STRIPE_CLIENT) private readonly stripe: InstanceType<typeof Stripe>,
+  ) {}
 
   async createPaymentIntent(userId: string, dto: CreatePaymentDto) {
     const order = await this.prisma.order.findUnique({

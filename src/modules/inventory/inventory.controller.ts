@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { InventoryService } from './inventory.service';
 import { SetInventoryDto, ReserveStockDto } from './dto';
-import { Public, Roles, ParseObjectIdPipe } from '../../common';
+import { Roles, ParseObjectIdPipe } from '../../common';
 
 @ApiTags('Inventory')
 @Controller('inventory')

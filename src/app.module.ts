@@ -1,8 +1,12 @@
 import { Module } from '@nestjs/common';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppConfigModule } from './config/config.module';
 import { PrismaModule } from './database/prisma/prisma.module';
 import { I18nModule } from './i18n';
 import { CommonModule } from './common/common.module';
+import { InfrastructureModule } from './modules/infrastructure';
+import { RequestContextModule } from './modules/infrastructure';
+import { DiscoveryModule } from './common/discovery';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoriesModule } from './modules/catalog/categories/categories.module';
@@ -17,14 +21,8 @@ import { PaymentsModule } from './modules/payments/payments.module';
 import { AuditModule } from './modules/audit/audit.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { ShippingModule } from './modules/shipping/shipping.module';
-import { ProductApprovalModule } from './modules/marketplace/product-approval/product-approval.module';
-import { ShippingPoliciesModule } from './modules/marketplace/shipping-policies/shipping-policies.module';
 import { VendorsModule } from './modules/vendors/vendors.module';
-import { VerificationModule } from './modules/marketplace/verification/verification.module';
-import { CommissionsModule } from './modules/marketplace/commissions/commissions.module';
-import { CheckoutSplitModule } from './modules/marketplace/checkout-split/checkout-split.module';
-import { SettlementsModule } from './modules/marketplace/settlements/settlements.module';
-import { DashboardModule } from './modules/marketplace/dashboard/dashboard.module';
+import { MarketplaceModule } from './modules/marketplace';
 import { WishlistModule } from './modules/wishlist/wishlist.module';
 import { WaitlistModule } from './modules/waitlist/waitlist.module';
 import { PromotionsModule } from './modules/promotions/promotions.module';
@@ -34,10 +32,7 @@ import { RecentlyViewedModule } from './modules/recently-viewed/recently-viewed.
 import { ProductRelationsModule } from './modules/catalog/product-relations/product-relations.module';
 import { ProductBundlesModule } from './modules/catalog/product-bundles/product-bundles.module';
 import { AbandonedCartModule } from './modules/cart/abandoned/abandoned.module';
-import { BusinessModule } from './modules/b2b/business';
-import { PurchaseOrdersModule } from './modules/b2b/purchase-orders';
-import { QuotesModule } from './modules/b2b/quotes';
-import { TierPricingModule } from './modules/b2b/tier-pricing';
+import { B2BModule } from './modules/b2b';
 import { ImportExportModule } from './modules/import-export/import-export.module';
 import { SeoModule } from './modules/cms/seo/seo.module';
 import { SocialAuthModule } from './modules/auth/social/social-auth.module';
@@ -46,6 +41,10 @@ import { GqlModule } from './modules/graphql';
 @Module({
   imports: [
     I18nModule,
+    RequestContextModule,
+    InfrastructureModule,
+    EventEmitterModule.forRoot(),
+    DiscoveryModule,
     AppConfigModule,
     CommonModule,
     PrismaModule,
@@ -61,16 +60,10 @@ import { GqlModule } from './modules/graphql';
     OrdersModule,
     PaymentsModule,
     AuditModule,
-    NotificationsModule,
+    NotificationsModule.forRoot(),
     ShippingModule,
     VendorsModule,
-    VerificationModule,
-    CommissionsModule,
-    ProductApprovalModule,
-    ShippingPoliciesModule,
-    CheckoutSplitModule,
-    SettlementsModule,
-    DashboardModule,
+    MarketplaceModule,
     WishlistModule,
     WaitlistModule,
     PromotionsModule,
@@ -80,10 +73,7 @@ import { GqlModule } from './modules/graphql';
     ProductRelationsModule,
     ProductBundlesModule,
     AbandonedCartModule,
-    BusinessModule,
-    PurchaseOrdersModule,
-    QuotesModule,
-    TierPricingModule,
+    B2BModule.forRoot(),
     ImportExportModule,
     SeoModule,
     SocialAuthModule,

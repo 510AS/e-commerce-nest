@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Patch, Body, Param, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { SettlementsService } from './settlements.service';
-import { CreatePayoutDto, PayoutFilterDto, MarkPaidDto } from './dto';
+import { CreatePayoutDto, MarkPaidDto } from './dto';
 import { Roles, CurrentUser } from '../../../common';
 
 @ApiTags('Settlements')
@@ -20,8 +20,8 @@ export class SettlementsController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create a payout for a vendor' })
-  createPayout(@CurrentUser('id') adminId: string, @Body() dto: CreatePayoutDto) {
-    return this.settlementsService.createPayout(dto.vendorId, adminId);
+  createPayout(@CurrentUser('id') _adminId: string, @Body() dto: CreatePayoutDto) {
+    return this.settlementsService.createPayout(dto.vendorId);
   }
 
   @Get('payouts')
@@ -48,8 +48,8 @@ export class SettlementsController {
   @Roles(['ADMIN'])
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Mark payout as paid' })
-  markPaid(@CurrentUser('id') adminId: string, @Param('id') id: string, @Body() dto: MarkPaidDto) {
-    return this.settlementsService.markPaid({ ...dto, payoutId: id }, adminId);
+  markPaid(@CurrentUser('id') _adminId: string, @Param('id') id: string, @Body() dto: MarkPaidDto) {
+    return this.settlementsService.markPaid({ ...dto, payoutId: id });
   }
 
   @Get('revenue')

@@ -1,5 +1,5 @@
 import { IsString, IsOptional, IsEnum, IsInt, Min } from 'class-validator';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum FulfillmentModeDto {
   VENDOR_SELF = 'VENDOR_SELF',

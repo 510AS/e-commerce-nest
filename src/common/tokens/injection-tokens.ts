@@ -1,0 +1,9 @@
+export const STRIPE_CLIENT = Symbol('STRIPE_CLIENT');
+export const REDIS_CLIENT = Symbol('REDIS_CLIENT');
+export const BULLMQ_QUEUE = Symbol('BULLMQ_QUEUE');
+export const MEILISEARCH_CLIENT = Symbol('MEILISEARCH_CLIENT');
+export const CACHE_MANAGER = Symbol('CACHE_MANAGER');
+export const EVENT_PUBLISHER = Symbol('EVENT_PUBLISHER');
+export const STORAGE_CLIENT = Symbol('STORAGE_CLIENT');
+export const REQUEST_CONTEXT = Symbol('REQUEST_CONTEXT');
+export const EXECUTION_CONTEXT_ADAPTER = Symbol('EXECUTION_CONTEXT_ADAPTER');

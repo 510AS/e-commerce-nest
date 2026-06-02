@@ -168,7 +168,7 @@ export class PromotionsService {
 
     const discount = this.calculateDiscount(promotion, Number(order.subtotal));
 
-    const [updatedOrder, usage] = await Promise.all([
+    await Promise.all([
       this.prisma.order.update({
         where: { id: orderId },
         data: { discountAmount: discount },

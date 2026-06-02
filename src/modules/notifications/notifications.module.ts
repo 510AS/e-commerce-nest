@@ -1,10 +1,27 @@
-import { Module } from '@nestjs/common';
-import { EventEmitterModule } from '@nestjs/event-emitter';
+import { Module, DynamicModule } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 
-@Module({
-  imports: [EventEmitterModule.forRoot()],
-  providers: [NotificationsService],
-  exports: [NotificationsService],
-})
-export class NotificationsModule {}
+export interface NotificationsModuleOptions {
+  transport?: 'log' | 'sendgrid' | 'smtp';
+  sendgridApiKey?: string;
+  fromAddress?: string;
+}
+
+@Module({})
+export class NotificationsModule {
+  static forRoot(options?: NotificationsModuleOptions): DynamicModule {
+    const transport = options?.transport ?? 'log';
+
+    return {
+      module: NotificationsModule,
+      providers: [
+        {
+          provide: 'NOTIFICATIONS_OPTIONS',
+          useValue: { ...options, transport },
+        },
+        NotificationsService,
+      ],
+      exports: [NotificationsService],
+    };
+  }
+}
